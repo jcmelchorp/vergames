@@ -9,13 +9,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
   imports: [
     RouterOutlet,
+    RouterLink,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -28,7 +29,28 @@ import { RouterOutlet } from '@angular/router';
 })
 export class NavigationComponent {
   private breakpointObserver = inject(BreakpointObserver);
-
+  menus: any[] = [
+    {
+      route: 'target',
+      title: 'Tiro al blanco',
+    },
+    {
+      route: 'stack',
+      title: 'Apilador',
+    },
+    {
+      route: 'fouronarow',
+      title: '4 en línea',
+    },
+    {
+      route: 'ppt',
+      title: 'Piedra, papel o tijeras',
+    },
+    {
+      route: 'tictactoe',
+      title: 'Juego del Gato',
+    },
+  ];
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
