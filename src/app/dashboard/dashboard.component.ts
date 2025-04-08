@@ -34,6 +34,20 @@ export class DashboardComponent {
         return [
           {
             imageUrl: '',
+            route: 'target',
+            title: 'Tiro al blanco',
+            cols: 1,
+            rows: 1,
+          },
+          {
+            imageUrl: '',
+            route: 'stack',
+            title: 'Apilador',
+            cols: 1,
+            rows: 1,
+          },
+          {
+            imageUrl: '',
             route: 'fouronarow',
             title: '4 en línea',
             cols: 1,
@@ -57,6 +71,20 @@ export class DashboardComponent {
       }
 
       return [
+        {
+          imageUrl: '',
+          route: 'target',
+          title: 'Tiro al blanco',
+          cols: 1,
+          rows: 1,
+        },
+        {
+          imageUrl: '',
+          route: 'stack',
+          title: 'Apilador',
+          cols: 1,
+          rows: 1,
+        },
         {
           imageUrl: '',
           route: 'fouronarow',

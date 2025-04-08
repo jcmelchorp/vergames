@@ -3,14 +3,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-tictactoe',
+  selector: 'app-stack',
   standalone: true,
-  imports: [MatIconModule, MatButtonModule],
-  templateUrl: './tictactoe.component.html',
-  styleUrls: ['./tictactoe.component.scss'],
+  imports: [MatButtonModule, MatIconModule],
+  templateUrl: './stack.component.html',
+  styleUrls: ['./stack.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TictactoeComponent implements OnInit {
+export class StackComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
