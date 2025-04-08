@@ -33,29 +33,51 @@ export class DashboardComponent {
       if (matches) {
         return [
           {
+            imageUrl: '',
+            route: 'fouronarow',
+            title: '4 en línea',
+            cols: 1,
+            rows: 1,
+          },
+          {
+            imageUrl: '',
+            route: 'ppt',
+            title: 'Piedra, papel o tijeras',
+            cols: 1,
+            rows: 1,
+          },
+          {
             imageUrl: '/assets/images/tictactoe.png',
             route: 'tictactoe',
             title: 'Juego del Gato',
             cols: 1,
             rows: 1,
           },
-          { imageUrl: '', route: '', title: '4 en línea', cols: 1, rows: 1 },
-          { imageUrl: '', route: '', title: 'Fat ping-pong', cols: 1, rows: 1 },
-          { imageUrl: '', route: '', title: 'Card 4', cols: 1, rows: 1 },
         ];
       }
 
       return [
         {
+          imageUrl: '',
+          route: 'fouronarow',
+          title: '4 en línea',
+          cols: 1,
+          rows: 1,
+        },
+        {
+          imageUrl: '',
+          route: 'ppt',
+          title: 'Piedra, papel o tijeras',
+          cols: 1,
+          rows: 2,
+        },
+        {
           imageUrl: '/assets/images/tictactoe.png',
           route: 'tictactoe',
           title: 'Juego del Gato',
-          cols: 2,
+          cols: 1,
           rows: 1,
         },
-        { imageUrl: '', route: '', title: '4 en línea', cols: 1, rows: 1 },
-        { imageUrl: '', route: '', title: 'Fat ping-pong', cols: 1, rows: 2 },
-        { imageUrl: '', route: '', title: 'Card 4', cols: 1, rows: 1 },
       ];
     })
   );
