@@ -50,14 +50,14 @@
     var(--rows, 6) * var(--cell-size) + var(--column-padding, 0.75)
   );
   /*--column-height: calc(var(--cell-size) * (-1 - var(--column-padding)));*/
-  --rotation: -24deg;
+  --rotation: -25deg;
   --bg: var(--surface-1);
 }
 
 .game-container {
   display: grid;
   place-items: center;
-  min-height: 100vh;
+  min-height: calc(100% - 70px);
   overflow: hidden;
   background: var(--bg);
 }
@@ -192,8 +192,9 @@ form > [type="reset"] {
 }
 
 .win-disc {
-  height: var(--cell-size);
+  height: calc(var(--cell-size) * 3);
   aspect-ratio: 1;
+  border-radius: 50%;
   background: var(--winner);
 }
 
@@ -413,7 +414,7 @@ form > [type="reset"] {
 }
 
 .dialog * + * {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .dialog__content {
@@ -446,6 +447,7 @@ form > [type="reset"] {
 
 /* Transition buttons */
 .faux-button {
+  margin-top: 60px;
   --bg: var(--gray-9);
   box-sizing: border-box;
   font-size: var(--font-size-fluid-1);

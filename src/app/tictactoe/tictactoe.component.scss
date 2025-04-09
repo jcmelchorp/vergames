@@ -353,7 +353,7 @@ input:checked
   ~ #cell-6-x:checked
   ~ #end
   #message::before {
-  content: "Player 1 won!";
+  content: "✖️ gana!";
 }
 
 #cell-0-o:checked
@@ -396,5 +396,5 @@ input:checked
   ~ #cell-6-o:checked
   ~ #end
   #message::before {
-  content: "Player 2 won!";
+  content: "⭕ gana!";
 }
