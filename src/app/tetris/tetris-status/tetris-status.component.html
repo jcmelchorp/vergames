@@ -1,0 +1,16 @@
+<p>Time: {{ this.getTimeElapsed() }}</p>
+<p>Score: {{ this.getScore() }}</p>
+<p>Speed: {{ this.getSpeed() }}</p>
+
+@if (this.tetrisService.isOver) {
+<section class="controls">
+  <button (click)="togglePause()">{{ this.isPaused() ? 'Continue' : 'Pause' }}</button>
+  <button (click)="reset()">Reset</button>
+</section>
+} @else {
+<section class="controls">
+  <p><strong>Game over!</strong></p>
+  <p>You scored <strong>{{ this.getScore() }}</strong></p>
+  <button mat-raised-button (click)="reset()">Otra vez</button>
+</section>
+}

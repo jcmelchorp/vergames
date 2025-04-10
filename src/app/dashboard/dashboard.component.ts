@@ -42,6 +42,20 @@ export class DashboardComponent {
       if (isHandset) {
         return [
           {
+            imageUrl: 'tetris.png',
+            route: 'tetris',
+            title: 'Tetris',
+            cols: 1,
+            rows: 1,
+          },
+          {
+            imageUrl: 'abrecaminos.png',
+            route: 'abrecaminos',
+            title: 'Abrecaminos',
+            cols: 1,
+            rows: 1,
+          },
+          {
             imageUrl: 'piedra-papel-tijera.png',
             route: 'ppt',
             title: 'Piedra, papel o tijeras',
@@ -100,6 +114,20 @@ export class DashboardComponent {
         ];
       }
       return [
+        {
+          imageUrl: 'tetris.png',
+          route: 'tetris',
+          title: 'Tetris',
+          cols: 1,
+          rows: 1,
+        },
+        {
+          imageUrl: 'abrecaminos.png',
+          route: 'abrecaminos',
+          title: 'Abrecaminos',
+          cols: 1,
+          rows: 1,
+        },
         {
           imageUrl: 'piedra-papel-tijera.png',
           route: 'ppt',

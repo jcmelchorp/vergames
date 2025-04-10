@@ -1,11 +1,6 @@
 import { Routes } from '@angular/router';
 import { NavigationComponent } from './navigation/navigation.component';
-import { TictactoeComponent } from './tictactoe/tictactoe.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { FouronarowComponent } from './fouronarow/fouronarow.component';
-import { PptComponent } from './ppt/ppt.component';
-import { TargetComponent } from './target/target.component';
-import { StackComponent } from './stack/stack.component';
 
 export const routes: Routes = [
   {
@@ -57,11 +52,23 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'abrecaminos',
+        loadComponent: () =>
+          import('./abrecaminos/abrecaminos.component').then(
+            (m) => m.AbrecaminosComponent
+          ),
+      },
+      {
         path: 'catch-the-cat',
         loadComponent: () =>
           import('./catch-the-cat/catch-the-cat.component').then(
             (m) => m.CatchTheCatComponent
           ),
+      },
+      {
+        path: 'tetris',
+        loadComponent: () =>
+          import('./tetris/tetris.component').then((m) => m.TetrisComponent),
       },
     ],
   },
