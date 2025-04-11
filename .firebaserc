@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "vergames": {
+      "hosting": {
+        "vergames": [
+          "vergames"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "vergames"
+  }
+}

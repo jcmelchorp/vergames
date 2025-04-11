@@ -102,6 +102,10 @@
               "src/app/catch-the-cat/catch-the-cat.js"
             ]
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }
