@@ -5,6 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { COLORS } from '../tetris-helpers/defs';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-tetris-pixel',

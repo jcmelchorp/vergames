@@ -13,13 +13,18 @@ import { TetrisStatusComponent } from './tetris-status/tetris-status.component';
 import { TetrisService } from './tetris.service';
 import { Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
-import { NgStyle, NgSwitch } from '@angular/common';
+import { AsyncPipe, NgStyle, NgSwitch } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tetris',
+  standalone: true,
   imports: [
     NgStyle,
     MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
     TetrisGlassComponent,
     TetrisNextComponent,
     TetrisStatusComponent,
@@ -28,13 +33,15 @@ import { NgStyle, NgSwitch } from '@angular/common';
   styleUrls: ['./tetris.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TetrisComponent implements AfterViewInit {
+export class TetrisComponent /*implements AfterViewInit*/ {
   private tetrisService: TetrisService = inject(TetrisService);
+  isStart$ = this.tetrisService.isStart$;
+
   // constructor(private tetrisService: TetrisService) {}
   disableButton: boolean = false;
-  ngAfterViewInit() {
-    this.startGame();
-  }
+  // ngAfterViewInit() {
+  //   this.startGame();
+  // }
 
   startGame(): void {
     this.tetrisService.init();

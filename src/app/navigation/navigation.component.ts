@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, DOCUMENT, NgIf } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -35,6 +35,7 @@ import { LayoutService } from '../services/layout.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {
+  // private document = inject(DOCUMENT);
   private layoutService: LayoutService = inject(LayoutService);
   private themeService: ThemeService = inject(ThemeService);
   isDarkTheme$: Observable<boolean> = this.themeService.isThemeDark;
@@ -73,6 +74,10 @@ export class NavigationComponent {
       route: 'catch-the-cat',
       title: 'Atrapando al gato',
     },
+    {
+      route: 'tetris',
+      title: 'Tetris',
+    },
   ];
 
   loginByGoogle() {
@@ -80,9 +85,10 @@ export class NavigationComponent {
     console.log('Login with Google');
   }
 
-  toggleDarkTheme() {
+  onThemeChange() {
     // console.log(isDarkTheme)
     this.themeService.toggleDarkTheme();
+    // this.document.body.classList.toggle('dark');
   }
 
   constructor() {}

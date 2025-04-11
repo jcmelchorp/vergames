@@ -8,7 +8,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { TetrisBoardComponent } from '../tetris-board/tetris-board.component';
-import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subject, Subscription } from 'rxjs';
 import { TetrisService } from '../tetris.service';
 import { AsyncPipe } from '@angular/common';
 
@@ -21,22 +21,24 @@ import { AsyncPipe } from '@angular/common';
 })
 export class TetrisGlassComponent implements OnInit /*, OnDestroy*/ {
   board: string[][] = [];
-  board$!: Observable<string[][]>;
-  // private subscription?: Subscription;
+  board$: Subject<string[][]> = new Subject<string[][]>();
+  private subscription?: Subscription;
 
   // private tetrisService: TetrisService = inject(TetrisService);
   constructor(private tetrisService: TetrisService) {}
 
   ngOnInit(): void {
-    this.board = this.tetrisService.renderGlass();
-    this.board$ = this.tetrisService.glassChanged;
+    this.board$.next(this.tetrisService.renderGlass());
+    this.subscription = this.tetrisService.glassChanged.subscribe((board) => {
+      this.board$.next(board);
+    });
   }
 
-  // ngOnDestroy(): void {
-  //   if (this.subscription) {
-  //     this.subscription.unsubscribe();
-  //   }
-  // }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent): void {

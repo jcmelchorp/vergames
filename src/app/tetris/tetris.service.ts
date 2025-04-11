@@ -38,12 +38,15 @@ export class TetrisService implements OnDestroy {
 
   private accelerate = false;
   private timer?: Timer;
+  timer$: Subject<Timer> = new Subject<Timer>();
 
   score = 0;
   speed = 1;
   timeElapsed = 0;
 
   isOver = false;
+  isOver$: Subject<boolean> = new Subject<boolean>();
+  isStart$: Subject<boolean> = new Subject<boolean>();
 
   constructor() {
     this.setNextFigure(getRandomFigure());
@@ -68,6 +71,8 @@ export class TetrisService implements OnDestroy {
     if (!isValid(this.glassBoard, figure, 0, col, 0)) {
       this.stopGame();
       this.isOver = true;
+      this.isOver$.next(this.isOver);
+      this.isStart$.next(false);
     } else {
       this.figure = figure;
       this.figureCol = col;
@@ -96,7 +101,8 @@ export class TetrisService implements OnDestroy {
     this.score = 0;
     this.speed = 1;
     this.isOver = false;
-
+    this.isOver$.next(this.isOver);
+    this.isStart$.next(true);
     if (this.timer) {
       this.timer.stop();
     }
@@ -225,6 +231,7 @@ export class TetrisService implements OnDestroy {
     if (this.timer) {
       this.timer.stop();
       this.timer = undefined;
+      this.isStart$.next(false);
     }
   }
 

@@ -27,7 +27,7 @@
 
         <!-- } -->
         <div>
-          <button type="button" mat-icon-button (click)="toggleDarkTheme()">
+          <button type="button" mat-icon-button (click)="onThemeChange()">
             <mat-icon class="rds-icon" [matTooltip]="(isDarkTheme$|async)?'Modo oscuro':'Modo claro'"
               aria-label="Alternar tema">{{(isDarkTheme$|async)?'nightlight':'light_mode'}}</mat-icon>
           </button>
