@@ -27,6 +27,11 @@
 
         <!-- } -->
         <div>
+          <!-- <p class="theme-toggle">
+            <mat-icon>light_mode</mat-icon>
+            <mat-slide-toggle (change)="onThemeChange($event)"></mat-slide-toggle>
+            <mat-icon>dark_mode</mat-icon>
+          </p> -->
           <button type="button" mat-icon-button (click)="onThemeChange()">
             <mat-icon class="rds-icon" [matTooltip]="(isDarkTheme$|async)?'Modo oscuro':'Modo claro'"
               aria-label="Alternar tema">{{(isDarkTheme$|async)?'nightlight':'light_mode'}}</mat-icon>

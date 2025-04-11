@@ -7,11 +7,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
-import { DashboardComponent } from '../dashboard/dashboard.component';
+import {
+  MatSlideToggleChange,
+  MatSlideToggleModule,
+} from '@angular/material/slide-toggle';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ThemeService } from '../services/theme.service';
-import { MatTooltipHarness } from '@angular/material/tooltip/testing';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LayoutService } from '../services/layout.service';
 
@@ -28,6 +29,7 @@ import { LayoutService } from '../services/layout.service';
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+    MatSlideToggleModule,
     AsyncPipe,
   ],
   templateUrl: './navigation.component.html',
@@ -35,7 +37,7 @@ import { LayoutService } from '../services/layout.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {
-  // private document = inject(DOCUMENT);
+  private document = inject(DOCUMENT);
   private layoutService: LayoutService = inject(LayoutService);
   private themeService: ThemeService = inject(ThemeService);
   isDarkTheme$: Observable<boolean> = this.themeService.isThemeDark;
@@ -85,11 +87,15 @@ export class NavigationComponent {
     console.log('Login with Google');
   }
 
-  onThemeChange() {
-    // console.log(isDarkTheme)
+  onThemeChange(event?: MatSlideToggleChange) {
     this.themeService.toggleDarkTheme();
-    // this.document.body.classList.toggle('dark');
   }
+
+  // onThemeChange() {
+  //   // console.log(isDarkTheme)
+  //
+  //   this.document.body.classList.toggle('dark');
+  // }
 
   constructor() {}
 }

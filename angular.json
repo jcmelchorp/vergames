@@ -32,7 +32,8 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/styles/tokens.scss"
             ],
             "scripts": [
               "src/app/catch-the-cat/phaser.min.js",
