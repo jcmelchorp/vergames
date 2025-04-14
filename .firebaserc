@@ -1,5 +1,21 @@
 {
   "projects": {
     "default": "vergames"
-  }
+  },
+  "targets": {
+    "vergames": {
+      "hosting": {
+        "games2play": [
+          "games2play"
+        ],
+        "vergames": [
+          "vergames"
+        ],
+        "yousuck": [
+          "yousuck"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
