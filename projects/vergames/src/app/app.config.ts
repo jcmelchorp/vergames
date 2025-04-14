@@ -19,7 +19,7 @@ import {
 } from '@angular/fire/analytics';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
-import { environment } from '../../../games2play/src/environments/environment';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
