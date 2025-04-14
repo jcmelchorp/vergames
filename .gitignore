@@ -5,7 +5,9 @@
 /tmp
 /out-tsc
 /bazel-out
-
+/projects/vergames/src/environments
+/projects/games2play/src/environments
+/projects/yousuck/src/environments
 # Node
 /node_modules
 npm-debug.log
@@ -40,3 +42,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json

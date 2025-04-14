@@ -1,0 +1,26 @@
+[
+  {
+    "question": "What is React ?",
+    "options": ["a", "b", "c", "d"],
+    "answer": "a",
+    "id": 1
+  },
+  {
+    "question": "What is State ?",
+    "options": ["w", "x", "y", "z"],
+    "answer": "x",
+    "id": 2
+  },
+  {
+    "question": "What is Component ?",
+    "options": ["s", "t", "u", "v"],
+    "answer": "t",
+    "id": 3
+  },
+  {
+    "question": "What is JSX ?",
+    "options": ["k", "l", "m", "n"],
+    "answer": "n",
+    "id": 4
+  }
+]

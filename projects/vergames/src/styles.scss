@@ -1,0 +1,70 @@
+// @use "./styles/tokens.scss";
+@use "@angular/material" as mat;
+@use "./styles/_theme-colors.scss" as theme-colors;
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: theme-colors.$primary-palette,
+        tertiary: theme-colors.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+// body {
+//   background: var(--mat-sys-surface);
+//   color: var(--mat-sys-on-surface);
+// }
+:root {
+  --background-color: #282846;
+  --board-color: #d8ebe4;
+  --snake-color: #fed049;
+  --food-color: #007580;
+
+  --dpad-radius: 17%;
+  --dpad-radius-in: 20%;
+  --dpad-fg: #ddd;
+  --dpad-fg-hover: #eee;
+  --dpad-bg: #fff;
+  --arrowcolor: #aaa;
+  --tri-sml-a: 13px;
+  --tri-sml-b: 19px;
+  --tri-lrg-a: 13px;
+  --tri-lrg-b: 19px;
+  --dpad-arrow-shift: 5px;
+  --dpad-arrow-move: 35%;
+}
+
+.snake-container {
+  height: calc(100% - 65px);
+  width: 100%;
+  margin: 0;
+  background-color: var(--background-color);
+  font-family: "Anton", sans-serif;
+}
+
+.snake {
+  background-color: var(--snake-color);
+  border: 0.25vmin solid black;
+  transition: all 0.3ms ease-in;
+}
+
+.food {
+  border-radius: 50%;
+  background-color: var(--food-color);
+  border: 0.25vmin solid black;
+  transition: all 0.3ms ease-in;
+}

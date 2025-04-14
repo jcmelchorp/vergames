@@ -1,0 +1,36 @@
+<div class="snake-container">
+  <div class="container">
+
+    <div class="score-card">
+      <div class="score-board">
+        <h2>Score: {{food.currentScore}}</h2>
+      </div>
+
+      <button class="restart-button" mat-raised-button type="button" (click)="restart()">
+        <mat-icon>refresh</mat-icon>
+        <span>Otra vez</span>
+      </button>
+    </div>
+
+    <div class="game-board">
+
+
+    </div>
+
+    <div class="game-over" *ngIf="gameOver">
+      <h1>Game Over</h1>
+    </div>
+
+    <div class="mobile-controls">
+      <nav class="o-pad">
+        <a class="up" (click)="dpadMovement('ArrowUp')"></a>
+        <a class="right" (click)="dpadMovement('ArrowRight')"></a>
+        <a class="down" (click)="dpadMovement('ArrowDown')"></a>
+        <a class="left" (click)="dpadMovement('ArrowLeft')"></a>
+      </nav>
+    </div>
+
+
+
+  </div>
+</div>

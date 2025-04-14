@@ -1,0 +1,54 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+    <mat-toolbar color="default">
+      <button mat-button type="button" [routerLink]="['/']">VerGames</button>
+    </mat-toolbar>
+    <mat-nav-list>
+      @for (menu of menus; track $index) {
+      <mat-list-item [routerLink]="menu.route" routerLinkActive="active-link">
+        <mat-icon mat-list-icon>{{ menu.icon }}</mat-icon>
+        <span mat-line>{{ menu.title }}</span>
+      </mat-list-item>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <div style="display: flex;justify-content: space-between; align-items: center; width: 100%;">
+        <!-- @if (isHandset$ | async) { -->
+        <div style="display: flex;align-items: center;">
+          <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+          <button *ngIf="(isHandset$ | async) || !drawer.opened" mat-button type="button"
+            [routerLink]="['/']">VerGames</button>
+        </div>
+
+        <!-- } -->
+        <div>
+          <!-- <p class="theme-toggle">
+            <mat-icon>light_mode</mat-icon>
+            <mat-slide-toggle (change)="onThemeChange($event)"></mat-slide-toggle>
+            <mat-icon>dark_mode</mat-icon>
+          </p> -->
+          <button type="button" mat-icon-button (click)="onThemeChange()">
+            <mat-icon class="rds-icon" [matTooltip]="(isDarkTheme$|async)?'Modo oscuro':'Modo claro'"
+              aria-label="Alternar tema">{{(isDarkTheme$|async)?'nightlight':'light_mode'}}</mat-icon>
+          </button>
+          <!-- @if (isOnline && user) {
+        <button type="button" mat-icon-button [matMenuTriggerFor]="userMenu">
+          <img class="rounded-circle" src="{{user.photoUrl?user.photoUrl:'/assets/images/default_user.jpeg'}}" />
+        </button>
+        } @else { -->
+          <button mat-icon-button type="button" (click)="loginByGoogle()" matTooltip="Iniciar sesión">
+            <img src="g.png" height="20px">
+          </button>
+          <!-- } -->
+        </div>
+      </div>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,27 @@
+<!-- @if ((isStart$|async)) { -->
+<p>Time: {{ this.timeElapsed$|async }}</p>
+<p>Score: {{ this.getScore() }}</p>
+<p>Speed: {{ this.getSpeed() }}</p>
+
+<section class="controls">
+  @if (!(isOver$|async)) {
+  <button mat-icon-button (click)="togglePause();paused=!paused" [matTooltip]="paused ? 'Continua' : 'Pausa'">
+    <mat-icon>{{ this.paused ? 'play_arrow' : 'pause' }}</mat-icon>
+  </button>
+  <button mat-icon-button (click)="reset()" matTooltip="Reiniciar">
+    <mat-icon>refresh</mat-icon>
+  </button>
+  } @else {
+  <p><strong>Game over!</strong></p>
+  <p>You scored <strong>{{ this.getScore() }}</strong></p>
+  <button mat-button type="button" (click)="reset()">
+    <mat-icon>refresh</mat-icon>
+    <span>Otra vez</span>
+  </button>
+  }
+</section>
+<!--}  @else {
+<mat-progress-spinner [color]="'primary'" [mode]="'indeterminate'" [diameter]="50" [strokeWidth]="5"
+  class="loading-spinner">
+</mat-progress-spinner>
+} -->

@@ -1,0 +1,16 @@
+<div class="quiz-container">
+  <div class="quiz-main">
+    <div class="header">
+      <h3>Quiz App</h3>
+      <timer *ngIf="isQuizToBeStarted"></timer>
+    </div>
+    <div class="quiz-questions" *ngIf="isQuizToBeStarted; else showThis">
+      <questions></questions>
+    </div>
+    <ng-template #showThis>
+      <div class="start">
+        <button (click)="onStart()">Start Quiz</button>
+      </div>
+    </ng-template>
+  </div>
+</div>
