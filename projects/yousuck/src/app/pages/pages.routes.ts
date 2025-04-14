@@ -2,10 +2,21 @@ import { Routes } from '@angular/router';
 import { Documentation } from './documentation/documentation';
 import { Crud } from './crud/crud';
 import { Empty } from './empty/empty';
+import { Games } from './games/games.component';
+import HomeGamesComponent from './games/home/home-games.component';
+import FavoritesComponent from './games/favorites/favorites.component';
 
 export default [
-    { path: 'documentation', component: Documentation },
-    { path: 'crud', component: Crud },
-    { path: 'empty', component: Empty },
-    { path: '**', redirectTo: '/notfound' }
+  { path: 'documentation', component: Documentation },
+  { path: 'crud', component: Crud },
+  { path: 'empty', component: Empty },
+  {
+    path: 'games',
+    component: Games,
+    children: [
+      { path: '', component: HomeGamesComponent },
+      { path: 'favorites', component: FavoritesComponent },
+    ],
+  },
+  { path: '**', redirectTo: '/notfound' },
 ] as Routes;
