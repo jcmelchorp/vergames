@@ -11,7 +11,7 @@ export const appRoutes: Routes = [
     path: 'u',
     component: AppLayout,
     children: [
-      { path: 'dashboard', component: Dashboard },
+      { path: '', component: Dashboard, pathMatch: 'prefix' },
       {
         path: 'uikit',
         loadChildren: () => import('./app/pages/uikit/uikit.routes'),

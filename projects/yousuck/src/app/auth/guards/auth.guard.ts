@@ -14,11 +14,11 @@ export const authGuard: CanActivateFn = () => {
   return authStateObs$().pipe(
     map((user) => {
       if (!user) {
-        router.navigateByUrl('login');
+        router.navigateByUrl('/');
         return false;
       }
       return true;
-    })
+    }),
   );
 };
 
@@ -28,10 +28,10 @@ export const publicGuard: CanActivateFn = () => {
   return authStateObs$().pipe(
     map((user) => {
       if (user) {
-        router.navigateByUrl('/');
+        router.navigateByUrl('/u');
         return false;
       }
       return true;
-    })
+    }),
   );
 };

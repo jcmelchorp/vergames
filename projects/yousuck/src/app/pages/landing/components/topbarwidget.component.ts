@@ -102,7 +102,7 @@ import { ButtonModule } from 'primeng/button';
           pButton
           pRipple
           label="Register"
-          routerLink="/a/login"
+          routerLink="/a/register"
           [rounded]="true"
         ></button>
       </div>

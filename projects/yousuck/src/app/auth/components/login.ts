@@ -1,17 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '../services/auth.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
+export interface Credential {
+  email: string;
+  password: string;
+}
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
+    MatButtonModule,
     ButtonModule,
     CheckboxModule,
     InputTextModule,
@@ -72,6 +80,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                 type="text"
                 placeholder="Email address"
                 class="w-full md:w-[30rem] mb-8"
+                [fluid]="true"
                 [(ngModel)]="email"
               />
 
@@ -108,8 +117,22 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
               <p-button
                 label="Iniciar sesión"
                 styleClass="w-full"
-                routerLink="/"
+                (click)="loginByEmail()"
               ></p-button>
+
+              <button
+                mat-fab
+                extended
+                color="default"
+                (click)="onGoogleSignIn()"
+              >
+                <i class="pi pi-google"></i>
+                <span class="mat-h4">&nbsp; Inicia sesión con Google</span>
+              </button>
+              <button mat-fab extended color="default" (click)="guestLogin()">
+                <i class="pi pi-user"></i>
+                <span class="mat-h4">&nbsp; Usuario de prueba</span>
+              </button>
             </div>
           </div>
         </div>
@@ -118,9 +141,49 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
   `,
 })
 export class Login {
+  authService: AuthService = inject(AuthService);
+  router: Router = inject(Router);
+  _snackBar: MatSnackBar = inject(MatSnackBar);
   email: string = '';
 
   password: string = '';
 
   checked: boolean = false;
+
+  async loginByEmail(): Promise<void> {
+    const credential: Credential = {
+      email: this.email,
+      password: this.password,
+    };
+
+    try {
+      await this.authService.login(credential);
+      this.router.navigateByUrl('/u');
+      this.openSnackBar();
+    } catch (error) {
+      console.error('Google Sign-In error:', error);
+    }
+  }
+  async onGoogleSignIn(): Promise<void> {
+    try {
+      await this.authService.googleLogin();
+      this.router.navigateByUrl('/u');
+      this.openSnackBar();
+    } catch (error) {
+      console.error('Google Sign-In error:', error);
+    }
+  }
+
+  guestLogin(): void {
+    this.email = 'prueba@invitado.mail';
+    this.password = 'usuario';
+  }
+
+  openSnackBar() {
+    return this._snackBar.open('Succesfully Log in 😀', 'Close', {
+      duration: 2500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
 }

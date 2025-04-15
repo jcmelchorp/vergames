@@ -14,6 +14,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
+  signOut,
   user,
   UserCredential,
 } from '@angular/fire/auth';
@@ -42,16 +43,38 @@ export class AuthService {
   user$ = user(this._auth);
   idToken$ = idToken(this._auth); // 👈👈👈
 
-  loginByGoogle() {
-    // you can simply change the Google for another provider here
-    const provider = new GoogleAuthProvider(); // Use 'GoogleAuthProvider' directly
+  async googleLogin(): Promise<void> {
+    const provider = new GoogleAuthProvider();
     provider.addScope('profile');
     provider.addScope('email');
     provider.setCustomParameters({ prompt: 'select_account' });
-    return from(signInWithPopup(this._auth, provider)).pipe(
-      take(1),
-      switchMap((u) => this.user$),
-    );
+    try {
+      const result = await signInWithPopup(this._auth, provider);
+      const user = result.user;
+      if (!user) {
+        throw new Error('Google-Login error');
+      }
+    } catch (error) {
+      console.error('Google-Login error:', error);
+      throw error;
+    }
+  }
+
+  async login(credential: Credential): Promise<void> {
+    try {
+      const result = await signInWithEmailAndPassword(
+        this._auth,
+        credential.email.trim(),
+        credential.password.trim(),
+      );
+      const user = result.user;
+      if (!user) {
+        throw new Error('Google-Login error');
+      }
+    } catch (error) {
+      console.error('Google-Login error:', error);
+      throw error;
+    }
   }
 
   registerByGoogle() {
@@ -78,17 +101,8 @@ export class AuthService {
     // return await this._auth.sendPasswordResetEmail(passwordResetEmail);
   }
 
-  login(credential: Credential) {
-    signInWithEmailAndPassword(
-      this._auth,
-      credential.email.trim(),
-      credential.password.trim(),
-    );
-    return this.user$;
-  }
-
-  logOut(id?: string): Observable<void> {
-    return from(this._auth.signOut());
+  logout(): Promise<void> {
+    return signOut(this._auth);
   }
 
   checkAdminRole(uid: string): Observable<boolean> {

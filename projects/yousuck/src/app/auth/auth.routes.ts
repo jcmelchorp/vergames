@@ -3,11 +3,12 @@ import { Access } from './components/access';
 import { Login } from './components/login';
 import { Error } from './components/error';
 import { Register } from './components/register';
+import { publicGuard } from './guards/auth.guard';
 
 export default [
   { path: 'access', component: Access },
   { path: 'error', component: Error },
-  { path: 'login', component: Login },
-  { path: 'register', component: Register },
+  { path: 'login', component: Login, canActivate: [publicGuard] },
+  { path: 'register', component: Register, canActivate: [publicGuard] },
   { path: '**', redirectTo: '/notfound' },
 ] as Routes;
