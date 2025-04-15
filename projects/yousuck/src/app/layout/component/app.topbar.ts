@@ -21,9 +21,9 @@ import { LayoutService } from '../service/layout.service';
       <a class="layout-topbar-logo" routerLink="/">
         <svg
           fill="var(--primary-color)"
-          width="800px"
-          height="800px"
-          viewBox="0 0 32 32"
+          width="50px"
+          height="50px"
+          viewBox="0 0 30 30"
           xmlns="http://www.w3.org/2000/svg"
           id="Layer_1"
           data-name="Layer 1"
@@ -36,7 +36,7 @@ import { LayoutService } from '../service/layout.service';
           <circle cx="18.17" cy="6.55" r="1.39" />
         </svg>
 
-        <span>You Suck</span>
+        <span>U&nbsp;suck</span>
       </a>
     </div>
 
@@ -92,6 +92,11 @@ import { LayoutService } from '../service/layout.service';
           <button type="button" class="layout-topbar-action">
             <i class="pi pi-inbox"></i>
             <span>Messages</span>
+          </button>
+
+          <button type="button" class="layout-topbar-action">
+            <i class="pi pi-sign-in"></i>
+            <span>Login</span>
           </button>
           <button type="button" class="layout-topbar-action">
             <i class="pi pi-user"></i>

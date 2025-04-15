@@ -32,8 +32,34 @@ export class AppMenu {
           { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
           {
             label: 'Games',
-            icon: 'pi pi-fw pi-prime',
-            routerLink: ['/pages/games'],
+            icon: 'pi pi-fw pi-ticket',
+            routerLink: ['/u/pages/games'],
+          },
+          {
+            label: 'Auth',
+            icon: 'pi pi-fw pi-user',
+            items: [
+              {
+                label: 'Register',
+                icon: 'pi pi-fw pi-pen-to-square',
+                routerLink: ['/a/register'],
+              },
+              {
+                label: 'Login',
+                icon: 'pi pi-fw pi-sign-in',
+                routerLink: ['/a/login'],
+              },
+              {
+                label: 'Error',
+                icon: 'pi pi-fw pi-times-circle',
+                routerLink: ['/a/error'],
+              },
+              {
+                label: 'Access Denied',
+                icon: 'pi pi-fw pi-lock',
+                routerLink: ['/a/access'],
+              },
+            ],
           },
         ],
       },
@@ -43,85 +69,85 @@ export class AppMenu {
           {
             label: 'Form Layout',
             icon: 'pi pi-fw pi-id-card',
-            routerLink: ['/uikit/formlayout'],
+            routerLink: ['/u/uikit/formlayout'],
           },
           {
             label: 'Input',
             icon: 'pi pi-fw pi-check-square',
-            routerLink: ['/uikit/input'],
+            routerLink: ['/u/uikit/input'],
           },
           {
             label: 'Button',
             icon: 'pi pi-fw pi-mobile',
             class: 'rotated-icon',
-            routerLink: ['/uikit/button'],
+            routerLink: ['/u/uikit/button'],
           },
           {
             label: 'Table',
             icon: 'pi pi-fw pi-table',
-            routerLink: ['/uikit/table'],
+            routerLink: ['/u/uikit/table'],
           },
           {
             label: 'List',
             icon: 'pi pi-fw pi-list',
-            routerLink: ['/uikit/list'],
+            routerLink: ['/u/uikit/list'],
           },
           {
             label: 'Tree',
             icon: 'pi pi-fw pi-share-alt',
-            routerLink: ['/uikit/tree'],
+            routerLink: ['/u/uikit/tree'],
           },
           {
             label: 'Panel',
             icon: 'pi pi-fw pi-tablet',
-            routerLink: ['/uikit/panel'],
+            routerLink: ['/u/uikit/panel'],
           },
           {
             label: 'Overlay',
             icon: 'pi pi-fw pi-clone',
-            routerLink: ['/uikit/overlay'],
+            routerLink: ['/u/uikit/overlay'],
           },
           {
             label: 'Media',
             icon: 'pi pi-fw pi-image',
-            routerLink: ['/uikit/media'],
+            routerLink: ['/u/uikit/media'],
           },
           {
             label: 'Menu',
             icon: 'pi pi-fw pi-bars',
-            routerLink: ['/uikit/menu'],
+            routerLink: ['/u/uikit/menu'],
           },
           {
             label: 'Message',
             icon: 'pi pi-fw pi-comment',
-            routerLink: ['/uikit/message'],
+            routerLink: ['/u/uikit/message'],
           },
           {
             label: 'File',
             icon: 'pi pi-fw pi-file',
-            routerLink: ['/uikit/file'],
+            routerLink: ['/u/uikit/file'],
           },
           {
             label: 'Chart',
             icon: 'pi pi-fw pi-chart-bar',
-            routerLink: ['/uikit/charts'],
+            routerLink: ['/u/uikit/charts'],
           },
           {
             label: 'Timeline',
             icon: 'pi pi-fw pi-calendar',
-            routerLink: ['/uikit/timeline'],
+            routerLink: ['/u/uikit/timeline'],
           },
           {
             label: 'Misc',
             icon: 'pi pi-fw pi-circle',
-            routerLink: ['/uikit/misc'],
+            routerLink: ['/u/uikit/misc'],
           },
         ],
       },
       {
         label: 'Pages',
         icon: 'pi pi-fw pi-briefcase',
-        routerLink: ['/pages'],
+        routerLink: ['/u/pages'],
         items: [
           {
             label: 'Landing',
@@ -129,30 +155,9 @@ export class AppMenu {
             routerLink: ['/landing'],
           },
           {
-            label: 'Auth',
-            icon: 'pi pi-fw pi-user',
-            items: [
-              {
-                label: 'Login',
-                icon: 'pi pi-fw pi-sign-in',
-                routerLink: ['/auth/login'],
-              },
-              {
-                label: 'Error',
-                icon: 'pi pi-fw pi-times-circle',
-                routerLink: ['/auth/error'],
-              },
-              {
-                label: 'Access Denied',
-                icon: 'pi pi-fw pi-lock',
-                routerLink: ['/auth/access'],
-              },
-            ],
-          },
-          {
             label: 'Crud',
             icon: 'pi pi-fw pi-pencil',
-            routerLink: ['/pages/crud'],
+            routerLink: ['/u/pages/crud'],
           },
           {
             label: 'Not Found',
@@ -162,7 +167,7 @@ export class AppMenu {
           {
             label: 'Empty',
             icon: 'pi pi-fw pi-circle-off',
-            routerLink: ['/pages/empty'],
+            routerLink: ['/u/pages/empty'],
           },
         ],
       },
@@ -220,7 +225,7 @@ export class AppMenu {
           {
             label: 'Documentation',
             icon: 'pi pi-fw pi-book',
-            routerLink: ['/documentation'],
+            routerLink: ['/u/documentation'],
           },
           {
             label: 'View Source',
