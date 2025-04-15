@@ -1,16 +1,24 @@
 import { inject, Injectable } from '@angular/core';
 import {
+  applyActionCode,
   Auth,
   AuthCredential,
+  AuthProvider,
   authState,
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
+  FacebookAuthProvider,
+  fetchSignInMethodsForEmail,
   getAuth,
   getRedirectResult,
+  GithubAuthProvider,
   GoogleAuthProvider,
   idToken,
   linkWithCredential,
+  linkWithPopup,
   sendEmailVerification,
   sendPasswordResetEmail,
+  sendSignInLinkToEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
@@ -44,18 +52,18 @@ export class AuthService {
   idToken$ = idToken(this._auth); // 👈👈👈
 
   async googleLogin(): Promise<void> {
+    const prividerEmail = new EmailAuthProvider();
     const provider = new GoogleAuthProvider();
+    let currentUser = this._auth.currentUser;
     provider.addScope('profile');
     provider.addScope('email');
     provider.setCustomParameters({ prompt: 'select_account' });
     try {
-      const result = await signInWithPopup(this._auth, provider);
-      const user = result.user;
-      if (!user) {
-        throw new Error('Google-Login error');
-      }
-    } catch (error) {
-      console.error('Google-Login error:', error);
+      const result = await signInWithPopup(this._auth, provider).then(
+        (result) => console.log(result),
+      );
+    } catch (error: any) {
+      console.error(error);
       throw error;
     }
   }
@@ -66,14 +74,65 @@ export class AuthService {
         this._auth,
         credential.email.trim(),
         credential.password.trim(),
-      );
-      const user = result.user;
-      if (!user) {
-        throw new Error('Google-Login error');
-      }
-    } catch (error) {
+      ).then((result) => console.log(result));
+    } catch (error: any) {
       console.error('Google-Login error:', error);
       throw error;
+    }
+  }
+
+  async handleLogin3rdParty(target: string) {
+    let currentUser;
+    let provider: AuthProvider | null = null;
+
+    if (target === 'gmail') {
+      provider = new GoogleAuthProvider();
+    } else if (target === 'fb') {
+      provider = new FacebookAuthProvider();
+    } else if (target === 'github') {
+      provider = new GithubAuthProvider();
+    } else if (target === 'mail') {
+      provider = new EmailAuthProvider();
+    }
+    if (provider) {
+      await signInWithPopup(this._auth, provider)
+        .then((result) => {
+          currentUser = result.user;
+        })
+
+        .catch(async (error) => {
+          if (error.code === 'auth/account-exists-with-different-credential') {
+            await fetchSignInMethodsForEmail(
+              this._auth,
+              error.customData.email,
+            ).then(async (result) => {
+              let registeredProvider: AuthProvider | null = null;
+
+              if (result[0] === 'google.com') {
+                registeredProvider = new GoogleAuthProvider();
+              } else if (result[0] === 'facebook.com') {
+                registeredProvider = new FacebookAuthProvider();
+              } else if (result[0] === 'github.com') {
+                registeredProvider = new GithubAuthProvider();
+              } else if (result[0] === 'password') {
+                registeredProvider = new EmailAuthProvider();
+              }
+
+              if (registeredProvider) {
+                await signInWithPopup(this._auth, registeredProvider).then(
+                  (result) => {
+                    linkWithPopup(this._auth.currentUser!, provider)
+                      .then((result) => {
+                        console.log('AT LAST IT WORKS');
+                      })
+
+                      .catch((error) => {});
+                  },
+                );
+              }
+            });
+          }
+        });
     }
   }
 
@@ -89,12 +148,28 @@ export class AuthService {
     );
   }
 
-  signup(email: string, password: string) {
-    createUserWithEmailAndPassword(this._auth, email.trim(), password.trim());
-    return this.user$;
-  }
-  async sendEmailVerification() {
-    //return await this._auth.currentUser.sendEmailVerification()
+  async signup(email: string, password: string) {
+    await createUserWithEmailAndPassword(
+      this._auth,
+      email.trim(),
+      password.trim(),
+    );
+
+    const actionCodeSettings = {
+      url: 'https://yousuck.web.app',
+      iOS: {
+        bundleId: 'com.example.ios',
+      },
+      android: {
+        packageName: 'com.example.android',
+        installApp: true,
+        minimumVersion: '12',
+      },
+      handleCodeInApp: true,
+    };
+    await sendEmailVerification(this._auth.currentUser!, actionCodeSettings);
+    // Obtain code from the user.
+    // await applyActionCode(this._auth, code);
   }
 
   async sendPasswordResetEmail(passwordResetEmail: string) {

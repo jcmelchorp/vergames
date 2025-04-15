@@ -120,12 +120,7 @@ export interface Credential {
                 (click)="loginByEmail()"
               ></p-button>
 
-              <button
-                mat-fab
-                extended
-                color="default"
-                (click)="onGoogleSignIn()"
-              >
+              <button mat-fab extended color="default" (click)="googleLogin()">
                 <i class="pi pi-google"></i>
                 <span class="mat-h4">&nbsp; Inicia sesión con Google</span>
               </button>
@@ -164,7 +159,7 @@ export class Login {
       console.error('Google Sign-In error:', error);
     }
   }
-  async onGoogleSignIn(): Promise<void> {
+  async googleLogin(): Promise<void> {
     try {
       await this.authService.googleLogin();
       this.router.navigateByUrl('/u');
