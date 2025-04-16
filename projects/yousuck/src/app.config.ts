@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  isDevMode,
+} from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
@@ -28,6 +32,9 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import Aura from '@primeng/themes/aura';
 import { providePrimeNG } from 'primeng/config';
+import { provideServiceWorker } from '@angular/service-worker';
+
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -57,5 +64,9 @@ export const appConfig: ApplicationConfig = {
     UserTrackingService,
     provideFirestore(() => getFirestore()),
     provideDatabase(() => getDatabase()),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:5000',
+    }),
   ],
 };

@@ -9,7 +9,7 @@ import { Router, RouterModule } from '@angular/router';
       <div class="grid grid-cols-12 gap-4">
         <div class="col-span-12 md:col-span-2">
           <a
-            (click)="router.navigate(['/'], { fragment: 'home' })"
+            (click)="router.navigate(['/'])"
             class="flex flex-wrap items-center justify-center md:justify-start md:mb-0 mb-6 cursor-pointer"
           >
             <svg

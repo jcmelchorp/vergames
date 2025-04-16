@@ -151,7 +151,8 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "projects/yousuck/ngsw-config.json"
             },
             "development": {
               "optimization": false,
