@@ -5,8 +5,10 @@ import { Empty } from './empty/empty';
 import { Games } from './games/games.component';
 import HomeGamesComponent from './games/home/home-games.component';
 import FavoritesComponent from './games/favorites/favorites.component';
+import { Profile } from './profile/profile';
 
 export default [
+  { path: 'profile', component: Profile },
   { path: 'documentation', component: Documentation },
   { path: 'crud', component: Crud },
   { path: 'empty', component: Empty },
