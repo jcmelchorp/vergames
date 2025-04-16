@@ -61,11 +61,17 @@ export interface Credential {
               <div
                 class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4"
               >
-                Bienvenido
+                Inicia sesión
               </div>
-              <span class="text-muted-color font-medium"
-                >Inicia sesión para continuar</span
-              >
+              <span
+                class="text-surface-900 dark:text-surface-0 font-medium text-l"
+                >Si aun no te registras, ingresa
+                <a
+                  (click)="router.navigate(['/a/register'], { fragment: '' })"
+                  class="text-primary"
+                  >aquí</a
+                >.
+              </span>
             </div>
 
             <div>
@@ -100,7 +106,7 @@ export interface Credential {
               ></p-password>
 
               <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                <div class="flex items-center">
+                <!-- <div class="flex items-center">
                   <p-checkbox
                     [(ngModel)]="checked"
                     id="rememberme1"
@@ -108,7 +114,7 @@ export interface Credential {
                     class="mr-2"
                   ></p-checkbox>
                   <label for="rememberme1">Recuérdame</label>
-                </div>
+                </div> -->
                 <span
                   class="font-medium no-underline ml-2 text-right cursor-pointer text-primary"
                   >¿Olvidaste tu contraseña?</span
@@ -117,17 +123,20 @@ export interface Credential {
               <p-button
                 label="Iniciar sesión"
                 styleClass="w-full"
+                raised
                 (click)="loginByEmail()"
               ></p-button>
+              <div class="mt-4">
+                <p-button severity="danger" outlined (click)="googleLogin()">
+                  <i class="pi pi-google"></i>
+                  <span>&nbsp; Inicia sesión con Google</span>
+                </p-button>
 
-              <button mat-fab extended color="default" (click)="googleLogin()">
-                <i class="pi pi-google"></i>
-                <span class="mat-h4">&nbsp; Inicia sesión con Google</span>
-              </button>
-              <button mat-fab extended color="default" (click)="guestLogin()">
-                <i class="pi pi-user"></i>
-                <span class="mat-h4">&nbsp; Usuario de prueba</span>
-              </button>
+                <p-button severity="secondary" outlined (click)="guestLogin()">
+                  <i class="pi pi-user"></i>
+                  <span>&nbsp; Usuario de prueba</span>
+                </p-button>
+              </div>
             </div>
           </div>
         </div>
@@ -138,12 +147,12 @@ export interface Credential {
 export class Login {
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
-  _snackBar: MatSnackBar = inject(MatSnackBar);
+  // _snackBar: MatSnackBar = inject(MatSnackBar);
   email: string = '';
 
   password: string = '';
 
-  checked: boolean = false;
+  // checked: boolean = false;
 
   async loginByEmail(): Promise<void> {
     const credential: Credential = {
@@ -154,7 +163,7 @@ export class Login {
     try {
       await this.authService.login(credential);
       this.router.navigateByUrl('/u');
-      this.openSnackBar();
+      // this.openSnackBar();
     } catch (error) {
       console.error('Google Sign-In error:', error);
     }
@@ -163,7 +172,7 @@ export class Login {
     try {
       await this.authService.googleLogin();
       this.router.navigateByUrl('/u');
-      this.openSnackBar();
+      // this.openSnackBar();
     } catch (error) {
       console.error('Google Sign-In error:', error);
     }
@@ -174,11 +183,11 @@ export class Login {
     this.password = 'usuario';
   }
 
-  openSnackBar() {
-    return this._snackBar.open('Succesfully Log in 😀', 'Close', {
-      duration: 2500,
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
-    });
-  }
+  // openSnackBar() {
+  //   return this._snackBar.open('Succesfully Log in 😀', 'Close', {
+  //     duration: 2500,
+  //     verticalPosition: 'top',
+  //     horizontalPosition: 'center',
+  //   });
+  // }
 }

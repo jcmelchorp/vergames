@@ -43,7 +43,7 @@ import { AuthService } from '../services/auth.service';
                 height="50px"
                 viewBox="0 0 30 30"
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-12 mr-2"
+                class="mb-8 w-16 shrink-0 mx-auto"
               >
                 <path
                   d="M21.56,9.54c.25-.65,.38-1.36,.38-2.08,0-3.27-2.66-5.93-5.93-5.93s-5.94,2.66-5.94,5.93c0,.72,.13,1.43,.38,2.08-.59,.45-.95,1.15-.95,1.93,0,1.14,.78,2.08,1.83,2.36l3.94,16.06c.08,.34,.38,.57,.73,.57s.65-.24,.73-.57l3.95-16.06c1.05-.27,1.83-1.22,1.83-2.35,0-.79-.37-1.49-.95-1.93Zm-5.55-6.51c2.44,0,4.43,1.99,4.43,4.43,0,.55-.1,1.08-.29,1.57-.03,0-.06,0-.08,0H11.94s-.06,0-.08,0c-.19-.49-.29-1.02-.29-1.57,0-2.44,1.99-4.43,4.44-4.43Zm0,23.53l-3.11-12.65h6.21l-3.11,12.65Zm4.06-14.15H11.94c-.52,0-.94-.42-.94-.94,0-.41,.26-.76,.68-.9,.07-.03,.16-.04,.26-.04h8.13c.09,0,.18,.02,.3,.06,.38,.12,.64,.47,.64,.88,0,.52-.42,.94-.94,.94Z"
@@ -55,11 +55,17 @@ import { AuthService } from '../services/auth.service';
               <div
                 class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4"
               >
-                Bienvenido
+                Registro
               </div>
-              <span class="text-muted-color font-medium"
-                >Registrate para continuar</span
-              >
+              <span
+                class="text-surface-900 dark:text-surface-0 font-medium text-l"
+                >Si ya estás inscrito, ingresa
+                <a
+                  (click)="router.navigate(['/a/login'], { fragment: '' })"
+                  class="text-primary"
+                  >aquí</a
+                >.
+              </span>
             </div>
 
             <div>
@@ -72,7 +78,7 @@ import { AuthService } from '../services/auth.service';
                 pInputText
                 id="email1"
                 type="text"
-                placeholder="Email address"
+                placeholder="Correo electrónico"
                 class="w-full md:w-[30rem] mb-8"
                 [(ngModel)]="email"
               />
@@ -80,19 +86,34 @@ import { AuthService } from '../services/auth.service';
               <label
                 for="password1"
                 class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
-                >Password</label
+                >Contraseña</label
               >
               <p-password
                 id="password1"
                 [(ngModel)]="password"
-                placeholder="Password"
+                placeholder="Contraseña"
                 [toggleMask]="true"
                 styleClass="mb-4"
                 [fluid]="true"
                 [feedback]="false"
               ></p-password>
 
-              <div class="flex items-center justify-between mt-2 mb-8 gap-8">
+              <!-- <label
+                for="password2"
+                class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
+                >Password</label
+              > -->
+              <p-password
+                id="password2"
+                [(ngModel)]="password2"
+                placeholder="Confirmar contraseña"
+                [toggleMask]="true"
+                styleClass="mb-4"
+                [fluid]="true"
+                [feedback]="false"
+              ></p-password>
+
+              <!-- <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                 <div class="flex items-center">
                   <p-checkbox
                     [(ngModel)]="checked"
@@ -106,7 +127,7 @@ import { AuthService } from '../services/auth.service';
                   class="font-medium no-underline ml-2 text-right cursor-pointer text-primary"
                   >Forgot password?</span
                 >
-              </div>
+              </div> -->
               <p-button
                 label="Registro"
                 styleClass="w-full"
@@ -126,11 +147,14 @@ export class Register {
   email: string = '';
 
   password: string = '';
+  password2: string = '';
 
   checked: boolean = false;
 
   registerByEmail(): void {
-    this.authService.signup(this.email, this.password);
-    this.router.navigateByUrl('/a/verification');
+    if (this.password == this.password2) {
+      this.authService.signup(this.email, this.password);
+      this.router.navigateByUrl('/a/verification');
+    }
   }
 }

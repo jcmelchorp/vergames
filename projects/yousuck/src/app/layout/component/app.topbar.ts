@@ -16,7 +16,7 @@ import { Avatar } from 'primeng/avatar';
   imports: [
     RouterModule,
     CommonModule,
-    Avatar,
+    // Avatar,
     StyleClassModule,
     AppConfigurator,
   ],
@@ -109,15 +109,15 @@ import { Avatar } from 'primeng/avatar';
             class="layout-topbar-action"
             routerLink="/u/pages/profile"
           >
-            <!-- <i class="pi pi-user"></i> -->
-            <p-avatar
+            <i class="pi pi-user"></i>
+            <!-- <p-avatar
               *ngIf="user.photoURL; else nophoto"
               image="{{ user!.photoURL }}"
               shape="circle"
-            ></p-avatar>
-            <ng-template #nophoto>
+            ></p-avatar> -->
+            <!-- <ng-template #nophoto>
               <i class="pi pi-user"></i>
-            </ng-template>
+            </ng-template> -->
             <span>Profile</span>
           </button>
           <button
