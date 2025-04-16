@@ -4,9 +4,10 @@ import { Dashboard } from './app/pages/dashboard/dashboard';
 import { Documentation } from './app/pages/documentation/documentation';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
+import { publicGuard } from './app/auth/guards/auth.guard';
 
 export const appRoutes: Routes = [
-  { path: '', component: Landing },
+  { path: '', component: Landing, canActivate: [publicGuard] },
   {
     path: 'u',
     component: AppLayout,

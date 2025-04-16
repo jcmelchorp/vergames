@@ -8,11 +8,18 @@ import { LayoutService } from '../service/layout.service';
 import { AuthService } from '../../auth/services/auth.service';
 import { Observable } from 'rxjs';
 import { User } from '@angular/fire/auth';
+import { Avatar } from 'primeng/avatar';
 
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+  imports: [
+    RouterModule,
+    CommonModule,
+    Avatar,
+    StyleClassModule,
+    AppConfigurator,
+  ],
   template: ` <div class="layout-topbar">
     <div class="layout-topbar-logo-container">
       <button
@@ -87,7 +94,7 @@ import { User } from '@angular/fire/auth';
       </button>
 
       <div class="layout-topbar-menu hidden lg:block">
-        <div class="layout-topbar-menu-content">
+        <div *ngIf="user$ | async as user" class="layout-topbar-menu-content">
           <button type="button" class="layout-topbar-action">
             <i class="pi pi-calendar"></i>
             <span>Calendar</span>
@@ -97,26 +104,30 @@ import { User } from '@angular/fire/auth';
             <span>Messages</span>
           </button>
 
-          @if (user$ | async) {
-            <button type="button" class="layout-topbar-action">
-              <i class="pi pi-user"></i>
-              <span>Profile</span>
-            </button>
-            <button
-              type="button"
-              class="layout-topbar-action"
-              (click)="signOut()"
-            >
-              <i class="pi pi-sign-out"></i>
-              <span>Logout</span>
-            </button>
-          } @else {
-            <button type="button" class="layout-topbar-action">
-              <i class="pi pi-sign-in"></i>
-              <span>Login</span>
-            </button>
-          }
+          <button type="button" class="layout-topbar-action">
+            <!-- <i class="pi pi-user"></i> -->
+            <p-avatar
+              *ngIf="user!.photoURL; else nouser"
+              image="{{ user!.photoURL }}"
+              shape="circle"
+            ></p-avatar>
+            <span>Profile</span>
+          </button>
+          <button
+            type="button"
+            class="layout-topbar-action"
+            (click)="signOut()"
+          >
+            <i class="pi pi-sign-out"></i>
+            <span>Logout</span>
+          </button>
         </div>
+        <ng-template #nouser>
+          <button type="button" class="layout-topbar-action">
+            <i class="pi pi-sign-in"></i>
+            <span>Login</span>
+          </button>
+        </ng-template>
       </div>
     </div>
   </div>`,

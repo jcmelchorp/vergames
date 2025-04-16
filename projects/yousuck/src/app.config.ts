@@ -19,6 +19,7 @@ import {
   indexedDBLocalPersistence,
   browserPopupRedirectResolver,
   browserLocalPersistence,
+  browserSessionPersistence,
 } from '@angular/fire/auth';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
