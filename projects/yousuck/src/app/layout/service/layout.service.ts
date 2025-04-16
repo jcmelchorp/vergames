@@ -29,13 +29,15 @@ export class LayoutService {
   isDarkInLocal = localStorage.getItem('yousuck-dark') === 'true';
   primaryLocal = localStorage.getItem('yousuck-primary') || 'emerald';
   surfaceLocal = localStorage.getItem('yousuck-surface');
+  presetsLocal = localStorage.getItem('yousuck-presets') || 'Aura';
+  menuModeLocal = localStorage.getItem('yousuck-menu-mode') || 'static';
 
   _config: layoutConfig = {
-    preset: 'Aura',
+    preset: this.presetsLocal,
     primary: this.primaryLocal,
     surface: this.surfaceLocal,
     darkTheme: this.isDarkInLocal,
-    menuMode: 'static',
+    menuMode: this.menuModeLocal,
   };
 
   _state: LayoutState = {

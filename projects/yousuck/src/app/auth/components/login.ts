@@ -19,7 +19,6 @@ export interface Credential {
   selector: 'app-login',
   standalone: true,
   imports: [
-    MatButtonModule,
     ButtonModule,
     CheckboxModule,
     InputTextModule,
@@ -39,10 +38,10 @@ export interface Credential {
           style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"
         >
           <div
-            class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20"
+            class="w-full bg-surface-0 dark:bg-surface-900 py-5 px-5 sm:px-15"
             style="border-radius: 53px"
           >
-            <div class="text-center mb-8">
+            <div class="text-center mb-4">
               <svg
                 fill="var(--primary-color)"
                 width="50px"
@@ -64,11 +63,11 @@ export interface Credential {
                 Inicia sesión
               </div>
               <span
-                class="text-surface-900 dark:text-surface-0 font-medium text-l"
+                class="text-surface-700 dark:text-surface-0 font-medium dark:font-normal text-l"
                 >Si aun no te registras, ingresa
                 <a
-                  (click)="router.navigate(['/a/register'], { fragment: '' })"
-                  class="text-primary"
+                  (click)="router.navigate(['/a/register'])"
+                  class="no-underline text-right cursor-pointer text-primary"
                   >aquí</a
                 >.
               </span>
@@ -78,14 +77,14 @@ export interface Credential {
               <label
                 for="email1"
                 class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
-                >Email</label
+                >Correo electrónico</label
               >
               <input
                 pInputText
                 id="email1"
                 type="text"
-                placeholder="Email address"
-                class="w-full md:w-[30rem] mb-8"
+                placeholder="Correo electrónico"
+                class="w-full md:w-[30rem] mb-4"
                 [fluid]="true"
                 [(ngModel)]="email"
               />
@@ -93,40 +92,32 @@ export interface Credential {
               <label
                 for="password1"
                 class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
-                >Password</label
+                >Contraseña</label
               >
               <p-password
                 id="password1"
                 [(ngModel)]="password"
-                placeholder="Password"
+                placeholder="Contraseña"
                 [toggleMask]="true"
                 styleClass="mb-4"
                 [fluid]="true"
                 [feedback]="false"
               ></p-password>
 
-              <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                <!-- <div class="flex items-center">
-                  <p-checkbox
-                    [(ngModel)]="checked"
-                    id="rememberme1"
-                    binary
-                    class="mr-2"
-                  ></p-checkbox>
-                  <label for="rememberme1">Recuérdame</label>
-                </div> -->
-                <span
-                  class="font-medium no-underline ml-2 text-right cursor-pointer text-primary"
-                  >¿Olvidaste tu contraseña?</span
-                >
-              </div>
               <p-button
                 label="Iniciar sesión"
-                styleClass="w-full"
+                styleClass="w-full my-2"
                 raised
                 (click)="loginByEmail()"
               ></p-button>
-              <div class="mt-4">
+              <div class="flex items-center justify-around mt-2 mb-2 gap-4">
+                <a
+                  (click)="router.navigate(['/a/forgot'])"
+                  class="font-medium no-underline text-right cursor-pointer text-primary"
+                  >¿Olvidaste tu contraseña?</a
+                >
+              </div>
+              <div class="mt-2">
                 <p-button severity="danger" outlined (click)="googleLogin()">
                   <i class="pi pi-google"></i>
                   <span>&nbsp; Inicia sesión con Google</span>

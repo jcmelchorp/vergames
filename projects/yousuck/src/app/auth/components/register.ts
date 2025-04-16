@@ -33,10 +33,10 @@ import { AuthService } from '../services/auth.service';
           style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"
         >
           <div
-            class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20"
+            class="w-full bg-surface-0 dark:bg-surface-900 py-5 px-5 sm:px-15"
             style="border-radius: 53px"
           >
-            <div class="text-center mb-8">
+            <div class="text-center mb-4">
               <svg
                 fill="var(--primary-color)"
                 width="50px"
@@ -58,11 +58,11 @@ import { AuthService } from '../services/auth.service';
                 Registro
               </div>
               <span
-                class="text-surface-900 dark:text-surface-0 font-medium text-l"
+                class="text-surface-700 dark:text-surface-0  font-medium dark:font-normal text-l"
                 >Si ya estás inscrito, ingresa
                 <a
-                  (click)="router.navigate(['/a/login'], { fragment: '' })"
-                  class="text-primary"
+                  (click)="router.navigate(['/a/login'])"
+                  class="no-underline text-right cursor-pointer text-primary"
                   >aquí</a
                 >.
               </span>
@@ -72,14 +72,14 @@ import { AuthService } from '../services/auth.service';
               <label
                 for="email1"
                 class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
-                >Email</label
+                >Correo electrónico</label
               >
               <input
                 pInputText
                 id="email1"
                 type="text"
                 placeholder="Correo electrónico"
-                class="w-full md:w-[30rem] mb-8"
+                class="w-full md:w-[30rem] mb-4"
                 [(ngModel)]="email"
               />
 
@@ -93,7 +93,7 @@ import { AuthService } from '../services/auth.service';
                 [(ngModel)]="password"
                 placeholder="Contraseña"
                 [toggleMask]="true"
-                styleClass="mb-4"
+                styleClass="my-4"
                 [fluid]="true"
                 [feedback]="false"
               ></p-password>
@@ -108,7 +108,7 @@ import { AuthService } from '../services/auth.service';
                 [(ngModel)]="password2"
                 placeholder="Confirmar contraseña"
                 [toggleMask]="true"
-                styleClass="mb-4"
+                styleClass="my-4"
                 [fluid]="true"
                 [feedback]="false"
               ></p-password>
@@ -130,7 +130,8 @@ import { AuthService } from '../services/auth.service';
               </div> -->
               <p-button
                 label="Registro"
-                styleClass="w-full"
+                styleClass="w-full my-2"
+                raised
                 (click)="registerByEmail()"
               ></p-button>
             </div>

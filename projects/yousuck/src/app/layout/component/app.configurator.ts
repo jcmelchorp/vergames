@@ -502,6 +502,8 @@ export class AppConfigurator {
       ...state,
       preset: event,
     }));
+    localStorage.setItem('yousuck-presets', event);
+
     const preset = presets[event as KeyOfType<typeof presets>];
     const surfacePalette = this.surfaces.find(
       (s) => s.name === this.selectedSurfaceColor(),
@@ -518,5 +520,6 @@ export class AppConfigurator {
       ...prev,
       menuMode: event,
     }));
+    localStorage.setItem('yousuck-menu-mode', event);
   }
 }
