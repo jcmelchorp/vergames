@@ -60,7 +60,7 @@ import { ButtonModule } from 'primeng/button';
             pRipple
             class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl"
           >
-            <span>Features</span>
+            <span>Características</span>
           </a>
         </li>
         <li>
@@ -69,7 +69,7 @@ import { ButtonModule } from 'primeng/button';
             pRipple
             class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl"
           >
-            <span>Highlights</span>
+            <span>Destacado</span>
           </a>
         </li>
         <li>
@@ -78,7 +78,7 @@ import { ButtonModule } from 'primeng/button';
             pRipple
             class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl"
           >
-            <span>Pricing</span>
+            <span>Precios</span>
           </a>
         </li>
       </ul>

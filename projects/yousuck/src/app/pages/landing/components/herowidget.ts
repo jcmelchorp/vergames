@@ -14,21 +14,21 @@ import { RippleModule } from 'primeng/ripple';
     <div id="hero" class="flex flex-col pt-0 px-6 lg:px-20 overflow-hidden">
       <div class="mx-6 md:mx-20 mt-0 md:mt-6">
         <h1
-          class="text-6xl font-bold text-gray-900 dark:text-gray-100 leading-tight"
+          class="text-6xl font-semibold text-gray-900 dark:text-gray-100 leading-tight"
         >
-          <span class="font-light block">You suck</span>We all do.
+          <span class="font-light block">U&nbsp;suck</span>&commat;games
         </h1>
         <p
           class="font-normal text-2xl leading-normal md:mt-4 text-gray-700 dark:text-gray-300"
         >
-          So, there is nothing to worry about.
+          A place for people like you, who socks.
         </p>
         <button
           pButton
           pRipple
           [rounded]="true"
           type="button"
-          label="Get Started"
+          label="¿ya te vas?"
           class="!text-xl mt-8 !px-4"
         ></button>
       </div>
