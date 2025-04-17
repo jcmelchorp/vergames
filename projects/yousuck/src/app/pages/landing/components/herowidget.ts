@@ -6,16 +6,21 @@ import { RippleModule } from 'primeng/ripple';
   selector: 'hero-widget',
   imports: [ButtonModule, RippleModule],
   template: `
-    <div
+    <!-- <div
       id="hero"
       class="flex flex-col pt-6 px-6 lg:px-20 overflow-hidden"
       style="background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, rgb(238, 239, 175) 0%, rgb(195, 227, 250) 100%); clip-path: ellipse(150% 87% at 93% 13%)"
-    >
+    > -->
+    <div id="hero" class="flex flex-col pt-0 px-6 lg:px-20 overflow-hidden">
       <div class="mx-6 md:mx-20 mt-0 md:mt-6">
-        <h1 class="text-6xl font-bold text-gray-900 leading-tight">
+        <h1
+          class="text-6xl font-bold text-gray-900 dark:text-gray-100 leading-tight"
+        >
           <span class="font-light block">You suck</span>We all do.
         </h1>
-        <p class="font-normal text-2xl leading-normal md:mt-4 text-gray-700">
+        <p
+          class="font-normal text-2xl leading-normal md:mt-4 text-gray-700 dark:text-gray-300"
+        >
           So, there is nothing to worry about.
         </p>
         <button
@@ -27,7 +32,7 @@ import { RippleModule } from 'primeng/ripple';
           class="!text-xl mt-8 !px-4"
         ></button>
       </div>
-      <div class="flex justify-center md:justify-end">
+      <div class="flex justify-center md:justify-end ">
         <img
           src="https://static.vecteezy.com/system/resources/thumbnails/024/656/823/small_2x/delighted-diverse-people-making-victory-gestures-with-hands-enjoying-joint-success-png.png"
           alt="Hero Image"

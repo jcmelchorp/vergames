@@ -7,7 +7,11 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'topbar-widget',
   imports: [RouterModule, StyleClassModule, ButtonModule, RippleModule],
-  template: `<a class="flex items-center" href="#">
+  template: `<a
+      class="flex items-center"
+      (click)="router.navigate(['/'])"
+      pRipple
+    >
       <svg
         fill="var(--primary-color)"
         width="50px"
@@ -50,15 +54,6 @@ import { ButtonModule } from 'primeng/button';
       <ul
         class="list-none p-0 m-0 flex lg:items-center select-none flex-col lg:flex-row cursor-pointer gap-8"
       >
-        <li>
-          <a
-            (click)="router.navigate(['/'], { fragment: 'home' })"
-            pRipple
-            class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl"
-          >
-            <span>Home</span>
-          </a>
-        </li>
         <li>
           <a
             (click)="router.navigate(['/'], { fragment: 'features' })"
