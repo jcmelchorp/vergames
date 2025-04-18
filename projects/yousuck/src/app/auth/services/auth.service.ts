@@ -1,41 +1,49 @@
 import { inject, Injectable } from '@angular/core';
 import {
-  applyActionCode,
   Auth,
-  AuthCredential,
   AuthProvider,
   authState,
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   EmailAuthProvider,
   FacebookAuthProvider,
   fetchSignInMethodsForEmail,
-  getAuth,
-  getRedirectResult,
   GithubAuthProvider,
   GoogleAuthProvider,
   idToken,
-  linkWithCredential,
   linkWithPopup,
   sendEmailVerification,
   sendPasswordResetEmail,
-  sendSignInLinkToEmail,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
   signOut,
+  User,
   user,
-  UserCredential,
 } from '@angular/fire/auth';
 import {
+  collection,
   doc,
+  DocumentData,
   Firestore,
   getDoc,
-  setDoc,
+  QueryDocumentSnapshot,
   updateDoc,
 } from '@angular/fire/firestore';
-import { User as AuthUser } from '../../auth/models/user.model';
-import { from, Observable, of, switchMap, take } from 'rxjs';
+import { User as AuthUser } from '../models/user.model';
+import { from, map, Observable, switchMap, take } from 'rxjs';
 import { firebaseSerialize } from '../models/firebase.model';
+
+// const assignTypes = () => {
+//   return {
+//     toFirestore(doc: User): DocumentData {
+//       return doc;
+//     },
+//     fromFirestore(snapshot: QueryDocumentSnapshot): User {
+//       return snapshot.data()! as User;
+//     },
+//   };
+// };
 
 export interface Credential {
   email: string;
@@ -44,24 +52,33 @@ export interface Credential {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private _firestore = inject(Firestore);
+  private readonly PATH = 'users';
+  private readonly _firestore = inject(Firestore);
+  private readonly _auth = inject(Auth);
+  // private readonly userCollection = collection(
+  //   this._firestore,
+  //   this.PATH,
+  // ).withConverter(assignTypes());
 
-  private _auth = inject(Auth);
-  authState$ = authState(this._auth); // 👈👈👈
-  user$ = user(this._auth);
-  idToken$ = idToken(this._auth); // 👈👈👈
+  authState$: Observable<User | null> = authState(this._auth);
+  user$: Observable<User | null> = user(this._auth).pipe(
+    map((user) => {
+      return user;
+    }),
+  );
+  idToken$: Observable<string | null> = idToken(this._auth);
+
+  private setSessionStoragePersistence(): void {
+    setPersistence(this._auth, browserSessionPersistence);
+  }
 
   async googleLogin(): Promise<void> {
-    const prividerEmail = new EmailAuthProvider();
     const provider = new GoogleAuthProvider();
-    let currentUser = this._auth.currentUser;
     provider.addScope('profile');
     provider.addScope('email');
     provider.setCustomParameters({ prompt: 'select_account' });
     try {
-      const result = await signInWithPopup(this._auth, provider).then(
-        (result) => console.log(result),
-      );
+      const result = await signInWithPopup(this._auth, provider);
     } catch (error: any) {
       console.error(error);
       throw error;

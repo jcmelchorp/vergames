@@ -36,6 +36,11 @@ export class AppMenu {
             routerLink: ['/u/pages/games'],
           },
           {
+            label: 'Avatar',
+            icon: 'pi pi-fw pi-sparkles',
+            routerLink: ['/u/pages/avatar'],
+          },
+          {
             label: 'Auth',
             icon: 'pi pi-fw pi-user',
             items: [

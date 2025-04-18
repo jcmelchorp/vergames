@@ -7,12 +7,13 @@ import HomeGamesComponent from './games/home/home-games.component';
 import FavoritesComponent from './games/favorites/favorites.component';
 import { Profile } from './profile/profile';
 import { preventUnsavedChanges } from './dialogs/prevent-unsaved-changes';
-
+import { AvatarComponent } from './avatar/avatar';
 export default [
   { path: 'profile', component: Profile },
   { path: 'documentation', component: Documentation },
   { path: 'crud', component: Crud },
   { path: 'empty', component: Empty },
+  { path: 'avatar', component: AvatarComponent },
   {
     path: 'games',
     canDeactivate: [preventUnsavedChanges],
