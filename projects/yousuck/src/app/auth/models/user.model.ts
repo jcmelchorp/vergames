@@ -4,26 +4,30 @@ export const pluralizedEntityName = 'users';
 export const entityCollectionEndPoint = pluralizedEntityName;
 export interface User {
   id?: string;
-  uid?: string
+  uid?: string;
   customerId?: string;
   archived?: boolean;
   suspended?: boolean;
   password?: string;
   suspensionReason?: string;
   orgUnitPath?: string;
-  username?:string;
-  contests?:{},
-  emails?: [{
-    address: string,
-    customType: string,
-    primary: boolean,
-    type: 'custom' | 'home' | 'other' | 'work'
-  }];
+  username?: string;
+  contests?: {};
+  emails?: [
+    {
+      address: string;
+      customType: string;
+      primary: boolean;
+      type: 'custom' | 'home' | 'other' | 'work';
+    },
+  ];
   thumbnailPhotoUrl?: string;
-  notes?: [{
-    contentType: 'text_plain' | 'text_html',
-    value: string
-  }];
+  notes?: [
+    {
+      contentType: 'text_plain' | 'text_html';
+      value: string;
+    },
+  ];
 
   // PERSONAL
   curp?: string;
@@ -37,14 +41,15 @@ export interface User {
   isOnline?: boolean;
   isTeacher?: boolean;
   isVerified?: boolean;
-  primaryEmail?: string;
-  authPhotoUrl?: string;
-  photoUrl?: string;
+  email?: string;
+  authPhotoURL: string;
+  avatarURL?: string;
+  photoURL?: string;
   displayName?: string;
   name?: {
     givenName?: string;
     familyName?: string;
-    fullName?: string
+    fullName?: string;
   };
   creationTime?: string;
   lastLoginTime?: string;
@@ -82,11 +87,13 @@ export interface User {
   label?: 'purple' | 'blue' | 'green' | 'yellow' | 'red' | 'gray';
   // TEACHER
   rfc?: string;
-  permission?: string
-  phones?: [{
-    value?: string;
-    type?: 'Fijo' | 'Movil' | 'Trabajo';
-    primary?: boolean;
-    customType?: string
-  }];
+  permission?: string;
+  phones?: [
+    {
+      value?: string;
+      type?: 'Fijo' | 'Movil' | 'Trabajo';
+      primary?: boolean;
+      customType?: string;
+    },
+  ];
 }

@@ -20,30 +20,36 @@ import {
   signOut,
   User,
   user,
+  UserCredential,
 } from '@angular/fire/auth';
 import {
   collection,
+  collectionData,
   doc,
+  docData,
   DocumentData,
   Firestore,
   getDoc,
+  query,
   QueryDocumentSnapshot,
+  setDoc,
   updateDoc,
 } from '@angular/fire/firestore';
 import { User as AuthUser } from '../models/user.model';
-import { from, map, Observable, switchMap, take } from 'rxjs';
+import { from, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { firebaseSerialize } from '../models/firebase.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
-// const assignTypes = () => {
-//   return {
-//     toFirestore(doc: User): DocumentData {
-//       return doc;
-//     },
-//     fromFirestore(snapshot: QueryDocumentSnapshot): User {
-//       return snapshot.data()! as User;
-//     },
-//   };
-// };
+const assignTypes = () => {
+  return {
+    toFirestore(doc: AuthUser): DocumentData {
+      return doc;
+    },
+    fromFirestore(snapshot: QueryDocumentSnapshot): AuthUser {
+      return snapshot.data()! as AuthUser;
+    },
+  };
+};
 
 export interface Credential {
   email: string;
@@ -55,17 +61,28 @@ export class AuthService {
   private readonly PATH = 'users';
   private readonly _firestore = inject(Firestore);
   private readonly _auth = inject(Auth);
-  // private readonly userCollection = collection(
-  //   this._firestore,
-  //   this.PATH,
-  // ).withConverter(assignTypes());
+  private readonly userCollection = collection(
+    this._firestore,
+    this.PATH,
+  ).withConverter(assignTypes());
 
-  authState$: Observable<User | null> = authState(this._auth);
-  user$: Observable<User | null> = user(this._auth).pipe(
-    map((user) => {
-      return user;
+  private currentUserProfile$: Observable<AuthUser | null> = user(
+    this._auth,
+  ).pipe(
+    switchMap((user) => {
+      if (!user?.uid) {
+        return of(null);
+      }
+
+      const ref = doc(this._firestore, this.PATH, user?.uid).withConverter(
+        assignTypes(),
+      );
+      return docData(ref) as Observable<AuthUser>;
     }),
   );
+  currentUserProfile = toSignal(this.currentUserProfile$!);
+  authState$: Observable<User | null> = authState(this._auth);
+  user$: Observable<User | null> = user(this._auth);
   idToken$: Observable<string | null> = idToken(this._auth);
 
   private setSessionStoragePersistence(): void {
@@ -91,7 +108,9 @@ export class AuthService {
         this._auth,
         credential.email.trim(),
         credential.password.trim(),
-      ).then((result) => console.log(result));
+      );
+      // .then((result) => this._setUserData(result));
+      // console.log('Login result:', result);
     } catch (error: any) {
       console.error('Google-Login error:', error);
       throw error;
@@ -189,56 +208,71 @@ export class AuthService {
     // await applyActionCode(this._auth, code);
   }
 
-  async sendPasswordResetEmail(passwordResetEmail: string) {
-    // return await this._auth.sendPasswordResetEmail(passwordResetEmail);
-  }
-
   logout(): Promise<void> {
     return signOut(this._auth);
   }
 
   checkAdminRole(uid: string): Observable<boolean> {
-    const afsRef = doc(this._firestore, `users/${uid}`);
+    const afsRef = doc(this._firestore, `${this.PATH}/${uid}`);
     return from(getDoc(afsRef).then((user) => user.get('isAdmin')));
   }
 
+  getUserById(uid: string) {
+    const afsRef = doc(this._firestore, `${this.PATH}/${uid}`);
+    return from(getDoc(afsRef));
+  }
+
+  getUser() {
+    const afsRef = doc(this.userCollection, `${this._auth.currentUser!.uid}`);
+    return from(getDoc(afsRef));
+  }
   saveUser(user: AuthUser) {
-    const afsRef = doc(this._firestore, `users/${user.uid}`);
+    const afsRef = doc(this._firestore, `${this.PATH}/${user.uid}`);
+    return from(setDoc(afsRef, firebaseSerialize(user)));
+  }
+
+  updateUser(user: AuthUser) {
+    const afsRef = doc(this._firestore, `${this.PATH}/${user.uid}`);
     return from(updateDoc(afsRef, firebaseSerialize(user)));
   }
 
   checkContest(uid: string, contestId: string): Observable<boolean> {
-    const afsRef = doc(this._firestore, `users/${uid}/contests`);
+    const afsRef = doc(this._firestore, `${this.PATH}/${uid}/contests`);
     return from(getDoc(afsRef).then((user) => user.get(contestId)));
   }
 
   updateOnlineStatus(uid: string, status: boolean): Observable<void> {
-    const afsRef = doc(this._firestore, `users/${uid}`);
+    const afsRef = doc(this._firestore, `${this.PATH}/${uid}`);
     return from(updateDoc(afsRef, { isOnline: status }));
   }
 
-  // private async _setUserData(auth: UserCredential): Promise<AuthUser> {
-  //   // console.log(auth);
-  //   let pict = '/assets/images/default_user.jpeg';
-  //   pict = (await this.getBase64ImageFromUrl(
-  //     auth.user.providerData[0].photoURL!
-  //   )) as string;
-  //   const user: AuthUser = {
-  //     uid: auth.user.uid!,
-  //     id: auth.user.providerData[0].uid,
-  //     authPhotoUrl: auth.user.providerData[0].photoURL!,
-  //     photoUrl: pict || '/assets/images/default_user.jpeg',
-  //     displayName: auth.user.providerData[0].displayName!,
-  //     username: auth.user.email!.split('@')[0],
-  //     // name: { familyName:auth.user.providerData[1].displayName!, fullName: auth.user.providerData[0].displayName!},
-  //     primaryEmail: auth.user.email!,
-  //     isVerified: auth.user.emailVerified,
-  //     contests: {},
-  //     // custom ones
-  //   };
-  //   const userDocRef = doc(this._firestore, `users/${user.uid}`);
-  //   return setDoc(userDocRef, user).then(() => user);
-  // }
+  updatePhotoURL(url: string): Observable<void> {
+    const afsRef = doc(
+      this._firestore,
+      `${this.PATH}/${this._auth.currentUser?.uid}`,
+    );
+    return from(updateDoc(afsRef, { avatarURL: url }));
+  }
+  private async _setUserData(auth: UserCredential): Promise<AuthUser> {
+    // console.log(auth);
+    let pict = '/assets/images/default_user.jpeg';
+    pict = (await this.getBase64ImageFromUrl(
+      auth.user.providerData[0].photoURL!,
+    )) as string;
+    const user: AuthUser = {
+      uid: auth.user.uid!,
+      id: auth.user.providerData[0].uid,
+      authPhotoURL: auth.user.providerData[0].photoURL!,
+      photoURL: pict || '/assets/images/default_user.jpeg',
+      displayName: auth.user.providerData[0].displayName!,
+      username: auth.user.email!.split('@')[0],
+      // name: { familyName:auth.user.providerData[1].displayName!, fullName: auth.user.providerData[0].displayName!},
+      email: auth.user.email!,
+      isVerified: auth.user.emailVerified,
+    };
+    const userDocRef = doc(this._firestore, `${this.PATH}/${user.uid}`);
+    return setDoc(userDocRef, user).then(() => user);
+  }
 
   async getBase64ImageFromUrl(imageUrl: string) {
     var res = await fetch(imageUrl);
@@ -263,8 +297,6 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     const user = this._auth.currentUser;
-    // console.log(user);
-    // console.log(user?.email);
     return user !== null;
   }
 
@@ -278,9 +310,4 @@ export class AuthService {
         window.alert(error.message);
       });
   }
-
-  //  //Send Email Verification
-  //  sendEmailVerification(){
-  //    return sendEmailVerification(this._auth.currentUser as User );
-  //  }
 }

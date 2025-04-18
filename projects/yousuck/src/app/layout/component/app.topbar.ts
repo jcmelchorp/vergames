@@ -7,8 +7,8 @@ import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
 import { AuthService } from '../../auth/services/auth.service';
 import { Observable } from 'rxjs';
-import { User } from '@angular/fire/auth';
 import { Avatar } from 'primeng/avatar';
+import { User } from '../../auth/models/user.model';
 
 @Component({
   selector: 'app-topbar',
@@ -94,62 +94,59 @@ import { Avatar } from 'primeng/avatar';
       </button>
 
       <div class="layout-topbar-menu hidden lg:block">
-        <div *ngIf="user$ | async as user" class="layout-topbar-menu-content">
-          <button type="button" class="layout-topbar-action">
-            <i class="pi pi-calendar"></i>
-            <span>Calendar</span>
-          </button>
-          <button type="button" class="layout-topbar-action">
-            <i class="pi pi-inbox"></i>
-            <span>Messages</span>
-          </button>
+        @if (user()) {
+          <div class="layout-topbar-menu-content">
+            <button type="button" class="layout-topbar-action">
+              <i class="pi pi-calendar"></i>
+              <span>Calendar</span>
+            </button>
+            <button type="button" class="layout-topbar-action">
+              <i class="pi pi-inbox"></i>
+              <span>Messages</span>
+            </button>
 
-          <button
-            type="button"
-            class="layout-topbar-action"
-            routerLink="/u/pages/profile"
-          >
-            <i class="pi pi-user"></i>
-            <!-- <p-avatar
+            <button
+              type="button"
+              class="layout-topbar-action"
+              routerLink="/u/pages/profile"
+            >
+              <i class="pi pi-user"></i>
+              <!-- <p-avatar
               *ngIf="user.photoURL; else nophoto"
               image="{{ user!.photoURL }}"
               shape="circle"
             ></p-avatar> -->
-            <!-- <ng-template #nophoto>
+              <!-- <ng-template #nophoto>
               <i class="pi pi-user"></i>
             </ng-template> -->
-            <span>Profile</span>
-          </button>
-          <button
-            type="button"
-            class="layout-topbar-action"
-            (click)="signOut()"
-          >
-            <i class="pi pi-sign-out"></i>
-            <span>Logout</span>
-          </button>
-        </div>
-        <ng-template #nouser>
+              <span>Profile</span>
+            </button>
+            <button
+              type="button"
+              class="layout-topbar-action"
+              (click)="signOut()"
+            >
+              <i class="pi pi-sign-out"></i>
+              <span>Logout</span>
+            </button>
+          </div>
+        } @else {
           <button type="button" class="layout-topbar-action">
             <i class="pi pi-sign-in"></i>
             <span>Login</span>
           </button>
-        </ng-template>
+        }
       </div>
     </div>
   </div>`,
 })
 export class AppTopbar {
   router: Router = inject(Router);
-  user$!: Observable<User | null>;
+  authService: AuthService = inject(AuthService);
+  user = this.authService.currentUserProfile;
   items!: MenuItem[];
 
-  constructor(
-    public layoutService: LayoutService,
-    public authService: AuthService,
-  ) {
-    this.user$ = this.authService.user$;
-  }
+  constructor(public layoutService: LayoutService) {}
 
   toggleDarkMode() {
     this.layoutService.layoutConfig.update((state) => ({

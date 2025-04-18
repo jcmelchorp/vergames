@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  inject,
   Input,
   OnInit,
   ViewChild,
@@ -25,6 +26,7 @@ import { ButtonModule } from 'primeng/button';
 import { ColorPicker } from 'primeng/colorpicker';
 import { Slider } from 'primeng/slider';
 import { RadioButton } from 'primeng/radiobutton';
+import { AuthService } from '../../auth/services/auth.service';
 @Component({
   selector: 'app-avatar',
   standalone: true,
@@ -40,7 +42,7 @@ import { RadioButton } from 'primeng/radiobutton';
   template: `
     <!-- <div class="screen"> -->
     <div class="flex flex-row flex-wrap gap-2">
-      <div class="card">
+      <div class="card flex flex-col justify-between gap-2">
         <h5>Tamaño <p-slider [(ngModel)]="size" [min]="50" [max]="250" /></h5>
         <div style="min-height: 250px;min-width: 250px">
           <nice-avatar
@@ -66,20 +68,23 @@ import { RadioButton } from 'primeng/radiobutton';
           >
           </nice-avatar>
         </div>
-        <div class="flex flex-row justify-evenly">
+        <div class="flex flex-row justify-evenly gap-x-2 gap-y-2">
           <p-button
             icon="pi pi-sync"
             label="Nuevo"
-            rounded
-            outlined
+            severity="warn"
             (click)="random()"
           ></p-button>
-          <h5>Fondo <p-colorpicker name="bgColor" [(ngModel)]="bgColor" /></h5>
+          <p-button
+            icon="pi pi-user-edit"
+            label="Foto de perfil"
+            severity="info"
+            (click)="updatePhotoURL()"
+          ></p-button>
           <p-button
             icon="pi pi-download"
             label=" Descargar"
-            rounded
-            outlined
+            severity="success"
             (click)="getPng()"
           ></p-button>
         </div>
@@ -139,6 +144,7 @@ import { RadioButton } from 'primeng/radiobutton';
             <label [for]="value.key" class="ml-2">{{ value.name }}</label>
           </div>
         </div>
+        <h5>Fondo <p-colorpicker name="bgColor" [(ngModel)]="bgColor" /></h5>
       </div>
 
       <div class="card">
@@ -255,6 +261,8 @@ export class AvatarComponent implements OnInit, AfterViewInit {
   @ViewChild('avatar')
   avatar!: NiceAvatarComponent;
 
+  _authService: AuthService = inject(AuthService);
+
   size: number = 250;
   bgColor!: string;
   shirtColor!: string;
@@ -262,16 +270,16 @@ export class AvatarComponent implements OnInit, AfterViewInit {
   FaceColors: string[] = ['#F9C9B6', '#AC6651'];
   beardValues: Beard[] = [
     { key: 'Hipster', name: 'Hipster' },
-    { key: 'Scruff', name: 'Scruff' },
-    { key: 'None', name: 'None' },
+    { key: 'Scruff', name: 'Dr. House' },
+    { key: 'None', name: 'Ninguna' },
   ];
   beard!: Beard;
   beardColor!: string;
   eyesValues: Eyes[] = [
-    { key: 'Circle', name: 'Circle' },
-    { key: 'Oval', name: 'Oval' },
-    { key: 'Shadow', name: 'Shadow' },
-    { key: 'Smile', name: 'Smile' },
+    { key: 'Circle', name: 'Círculo' },
+    { key: 'Oval', name: 'Ovalo' },
+    { key: 'Shadow', name: 'Sombra' },
+    { key: 'Smile', name: 'Sonriza' },
   ];
   eye!: Eyes;
   eyeBrow!: Eyebrows;
@@ -288,8 +296,8 @@ export class AvatarComponent implements OnInit, AfterViewInit {
   ];
   ear!: Ear;
   earringValues: Earring[] = [
-    { key: 'Hoop', name: 'Hoop' },
-    { key: 'Stud', name: 'Stud' },
+    { key: 'Hoop', name: 'Aro' },
+    { key: 'Stud', name: 'Pieza' },
     { key: 'None', name: 'None' },
   ];
   earring!: Earring;
@@ -306,34 +314,34 @@ export class AvatarComponent implements OnInit, AfterViewInit {
   ];
   hair!: Hair;
   hairValues: Hair[] = [
-    { key: 'Danny_Phantom', name: 'Danny_Phantom' },
-    { key: 'Doug_Funny', name: 'Doug_Funny' },
-    { key: 'Fonza', name: 'Fonza' },
-    { key: 'Full', name: 'Full' },
-    { key: 'Mr_Clean', name: 'Mr_Clean' },
-    { key: 'Mr_T', name: 'Mr_T' },
-    { key: 'None', name: 'None' },
+    { key: 'Danny_Phantom', name: 'Danny Phantom' },
+    { key: 'Doug_Funny', name: 'Dug Narinaz' },
+    { key: 'Fonza', name: 'Peña Nieto' },
+    { key: 'Full', name: 'Melena' },
+    { key: 'Mr_Clean', name: 'Maestro limpio' },
+    { key: 'Mr_T', name: 'Mr. T' },
+    { key: 'None', name: 'Ninguno' },
     { key: 'Pixie', name: 'Pixie' },
-    { key: 'Turban', name: 'Turban' },
+    { key: 'Turban', name: 'Talibán' },
   ];
   hairColor!: string;
   nose!: Nose;
   noseValues: Nose[] = [
-    { key: 'Curve', name: 'Curve' },
-    { key: 'Pointed', name: 'Pointed' },
-    { key: 'Round', name: 'Round' },
+    { key: 'Curve', name: 'Curva' },
+    { key: 'Pointed', name: 'Punta' },
+    { key: 'Round', name: 'Redonda' },
   ];
   glasses!: Glasses;
   glassesValues: Glasses[] = [
-    { key: 'None', name: 'None' },
-    { key: 'Round', name: 'Round' },
-    { key: 'Square', name: 'Square' },
+    { key: 'None', name: 'Ninguno' },
+    { key: 'Round', name: 'Redondo' },
+    { key: 'Square', name: 'Cuadrado' },
   ];
   shirt!: Shirt;
   shirtValues: Shirt[] = [
-    { key: 'Collared', name: 'Collared' },
-    { key: 'Crew', name: 'Crew' },
-    { key: 'Open', name: 'Open' },
+    { key: 'Collared', name: 'Abierto' },
+    { key: 'Crew', name: 'Cerrado' },
+    { key: 'Open', name: 'Sin cuello' },
   ];
 
   BEARD_COLORS = ['#BB9E95', '#65473E'];
@@ -374,6 +382,35 @@ export class AvatarComponent implements OnInit, AfterViewInit {
 
   getRandom(list: any[]) {
     return list[Math.floor(Math.random() * list.length)];
+  }
+
+  updatePhotoURL() {
+    let data = new XMLSerializer().serializeToString(this.avatar.element);
+    let DOMURL = window.URL || window.webkitURL || window;
+
+    let img = new Image();
+    let svgBlob = new Blob([data], { type: 'image/svg+xml;charset=utf-8' });
+    let url = DOMURL.createObjectURL(svgBlob);
+
+    img.onload = () => {
+      this.context.drawImage(img, 0, 0);
+      DOMURL.revokeObjectURL(url);
+
+      var imgURI = this.canvas.nativeElement
+        .toDataURL('image/png')
+        .replace('image/png', 'image/octet-stream');
+      // aquí va lo bueno
+      // this.triggerDownload(imgURI);
+      // console.log(imgURI);
+      this._authService.updatePhotoURL(imgURI);
+    };
+    img.src = url;
+    this.context.clearRect(
+      0,
+      0,
+      this.canvas.nativeElement.width,
+      this.canvas.nativeElement.height,
+    );
   }
 
   getPng() {

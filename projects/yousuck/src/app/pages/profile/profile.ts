@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../auth/services/auth.service';
+import { User } from '../../auth/models/user.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, RouterModule],
   styleUrl: './profile.scss',
-  template: ` <aside *ngIf="user$ | async as user" class="profile-card">
+  template: ` <aside *ngIf="user() as user" class="profile-card">
     <header>
       <!-- here’s the avatar -->
       <img
@@ -16,6 +18,12 @@ import { AuthService } from '../../auth/services/auth.service';
         class="img-fluid rounded-circle d-print-none hoverZoomLink"
         alt="Usuario conectado"
         src="{{ user.photoURL }}"
+      />
+      <img
+        *ngIf="user.avatarURL; else nophoto"
+        class="img-fluid rounded-circle d-print-none hoverZoomLink"
+        alt="Usuario conectado"
+        src="{{ user.avatarURL }}"
       />
       <ng-template #nophoto>
         <i class="pi pi-user"></i>
@@ -33,14 +41,14 @@ import { AuthService } from '../../auth/services/auth.service';
     </header>
 
     <!-- bit of a bio; who are you? -->
-    <div class="profile-bio">
+    <!-- <div class="profile-bio">
       <p>
         Conoce las <a [routerLink]="['/policy']">políticas de privacidad </a>de
         tus datos.
       </p>
-    </div>
+    </div> -->
     <!-- some social links to show off -->
-    <ul class="profile-social-links">
+    <!-- <ul class="profile-social-links">
       <li>
         <a target="_blank" href="https://www.facebook.com/creativedonut">
           <i class="fa fa-facebook"></i>
@@ -61,10 +69,10 @@ import { AuthService } from '../../auth/services/auth.service';
           <i class="fa fa-behance"></i>
         </a>
       </li>
-    </ul>
+    </ul> -->
   </aside>`,
 })
 export class Profile {
-  _authService: AuthService = inject(AuthService);
-  user$ = this._authService.user$;
+  authService: AuthService = inject(AuthService);
+  user = this.authService.currentUserProfile;
 }

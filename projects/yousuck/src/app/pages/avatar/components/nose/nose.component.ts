@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
       <ng-container *ngIf="nose.key == 'Curve'">
         <path
           d="M203.687 173.056C203.89 176.899 205.385 185.138 209.735 187.354C215.174 190.124 210.91 199.306 200.729 198.718"
-          stroke="#171921"
+          stroke="black"
           stroke-width="4"
         />
       </ng-container>
@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
       <ng-container *ngIf="nose.key == 'Pointed'">
         <path
           d="M203.13 169.093C205.079 182.957 213.541 192.876 213.541 192.876C213.541 192.876 210.91 199.305 200.729 198.716"
-          stroke="#171921"
+          stroke="black"
           stroke-width="4"
         />
       </ng-container>
