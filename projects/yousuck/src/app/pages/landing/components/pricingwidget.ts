@@ -32,8 +32,9 @@ import { RippleModule } from 'primeng/ripple';
             </div>
             <img
               src="https://png.pngtree.com/png-clipart/20240923/original/pngtree-a-poor-homeless-man-png-image_16071919.png"
-              class="w-10/12 mx-auto"
+              class=" mx-auto"
               alt="free"
+              loading="eager"
             />
             <div class="my-8 flex flex-col items-center gap-4">
               <div class="flex items-center">

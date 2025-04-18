@@ -22,8 +22,6 @@ import {
   initializeAuth,
   indexedDBLocalPersistence,
   browserPopupRedirectResolver,
-  browserLocalPersistence,
-  browserSessionPersistence,
 } from '@angular/fire/auth';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
@@ -33,7 +31,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import Aura from '@primeng/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 import { provideServiceWorker } from '@angular/service-worker';
-
 
 export const appConfig: ApplicationConfig = {
   providers: [

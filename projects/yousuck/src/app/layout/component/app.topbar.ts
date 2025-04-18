@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -142,11 +142,10 @@ import { User } from '../../auth/models/user.model';
 })
 export class AppTopbar {
   router: Router = inject(Router);
+  layoutService: LayoutService = inject(LayoutService);
   authService: AuthService = inject(AuthService);
-  user = this.authService.currentUserProfile;
+  user = this.authService.userAuthProfile;
   items!: MenuItem[];
-
-  constructor(public layoutService: LayoutService) {}
 
   toggleDarkMode() {
     this.layoutService.layoutConfig.update((state) => ({

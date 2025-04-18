@@ -262,7 +262,7 @@ export class AvatarComponent implements OnInit, AfterViewInit {
   avatar!: NiceAvatarComponent;
 
   _authService: AuthService = inject(AuthService);
-
+  user = this._authService.userAuthProfile;
   size: number = 250;
   bgColor!: string;
   shirtColor!: string;
@@ -402,7 +402,7 @@ export class AvatarComponent implements OnInit, AfterViewInit {
       // aquí va lo bueno
       // this.triggerDownload(imgURI);
       // console.log(imgURI);
-      this._authService.updatePhotoURL(imgURI);
+      this._authService.updatePhotoURL(this.user()!.uid!, imgURI);
     };
     img.src = url;
     this.context.clearRect(

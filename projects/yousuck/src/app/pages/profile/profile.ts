@@ -74,5 +74,5 @@ import { Observable } from 'rxjs';
 })
 export class Profile {
   authService: AuthService = inject(AuthService);
-  user = this.authService.currentUserProfile;
+  user = this.authService.userAuthProfile;
 }
