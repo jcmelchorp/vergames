@@ -15,7 +15,6 @@ import {
   signOut,
   User,
   user,
-  UserCredential,
 } from '@angular/fire/auth';
 import {
   collection,
@@ -29,20 +28,9 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 import { User as AuthUser } from '../models/user.model';
-import { from, map, mergeMap, Observable, of, switchMap, tap } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { firebaseSerialize } from '../models/firebase.model';
 import { toSignal } from '@angular/core/rxjs-interop';
-
-const assignTypes = () => {
-  return {
-    toFirestore(doc: AuthUser): DocumentData {
-      return doc;
-    },
-    fromFirestore(snapshot: QueryDocumentSnapshot): AuthUser {
-      return snapshot.data()! as AuthUser;
-    },
-  };
-};
 
 export interface Credential {
   email: string;
@@ -55,31 +43,50 @@ export class AuthService {
   private readonly USERS = 'users';
   private readonly _fstore = inject(Firestore);
   private readonly _auth = inject(Auth);
+  assignTypes = () => {
+    return {
+      toFirestore(doc: AuthUser): DocumentData {
+        return doc;
+      },
+      fromFirestore(snapshot: QueryDocumentSnapshot): AuthUser {
+        return snapshot.data()! as AuthUser;
+      },
+    };
+  };
   /* Asignments */
   authState$ = authState(this._auth);
   user$ = user(this._auth);
   idToken$ = idToken(this._auth);
+
   /* References */
   private userCollectionRef = collection(
     this._fstore,
     this.USERS,
-  ).withConverter(assignTypes());
-  authUserDocRef = (uid: string) =>
-    doc(this._fstore, `${this.USERS}/${uid}`).withConverter(assignTypes());
+  ).withConverter(this.assignTypes());
+
+  authUserDocRef(uid: string) {
+    return doc(this._fstore, `${this.USERS}/${uid}`).withConverter(
+      this.assignTypes(),
+    );
+  }
   private userAuthProfile$ = user(this._auth).pipe(
-    mergeMap((user) => {
+    switchMap((user) => {
       if (!user?.uid) {
         return of(null);
+      } else {
+        return docData(this.authUserDocRef(user?.uid)).pipe(
+          map((userData) => {
+            // console.log('fsUser', userData);
+            // console.log('authUser', this._mergeAuthUser(user));
+            return { ...userData, ...this._mergeAuthUser(user) } as AuthUser;
+          }),
+        );
       }
-      return docData(this.authUserDocRef(user?.uid)).pipe(
-        map((userData) => {
-          return { ...this._mergeAuthUser(user), ...userData };
-        }),
-      );
     }),
-    tap((user) => console.log('userAuthProfile:', user)),
+    // tap((user) => console.log('userAuthProfile$', user)),
   );
   userAuthProfile = toSignal(this.userAuthProfile$!);
+
   /* Auth Methods */
 
   private setSessionStoragePersistence(): void {
@@ -91,21 +98,16 @@ export class AuthService {
     provider.addScope('profile');
     provider.addScope('email');
     provider.setCustomParameters({ prompt: 'select_account' });
-    try {
-      const result = await signInWithPopup(this._auth, provider);
-    } catch (error: any) {
-      console.error(error);
-      throw error;
-    }
+    return await signInWithPopup(this._auth, provider).then(() => {});
   }
 
-  async login(credential: Credential): Promise<void> {
+  login(credential: Credential): Promise<void> {
     try {
-      const result = await signInWithEmailAndPassword(
+      return signInWithEmailAndPassword(
         this._auth,
         credential.email.trim(),
         credential.password.trim(),
-      );
+      ).then(() => {});
     } catch (error: any) {
       console.error('Google-Login error:', error);
       throw error;
@@ -113,13 +115,13 @@ export class AuthService {
   }
 
   async signup(email: string, password: string): Promise<void> {
-    createUserWithEmailAndPassword(
+    await createUserWithEmailAndPassword(
       this._auth,
       email.trim(),
       password.trim(),
     ).then(async (result) => {
       let mergedUser = await this._mergeAuthUser(result.user);
-      this.createUser(mergedUser).then(() => user);
+      await this.createUser(mergedUser);
     });
     const actionCodeSettings = {
       url: 'https://yousuck.web.app',
@@ -133,16 +135,24 @@ export class AuthService {
       },
       handleCodeInApp: true,
     };
-    await sendEmailVerification(this._auth.currentUser!, actionCodeSettings);
+    return await sendEmailVerification(
+      this._auth.currentUser!,
+      actionCodeSettings,
+    );
     // Obtain code from the user.
     //await applyActionCode(this._auth, code);
   }
 
   async logout(): Promise<void> {
     return await signOut(this._auth);
-    // return await this.updateOnlineStatus(false)
-    //   .then(() => signOut(this._auth))
-    //   .catch(() => this.updateOnlineStatus(true));
+    // const res = () =>
+    //   signOut(this._auth).then(() => {
+    //     this.destroy$.next(); // Emits signal to unsubscribe
+    //     this.destroy$.complete();
+    //     return true;
+    //   });
+    // // catch error and return false if needed
+    // return defer(res);
   }
 
   async sendPasswordResetEmails(email: string): Promise<void> {
@@ -156,6 +166,10 @@ export class AuthService {
   }
 
   private _mergeAuthUser(authUser: User): AuthUser {
+    // let pict = '/assets/images/default_user.jpeg';
+    // pict = (await this.getBase64ImageFromUrl(
+    //   authUser.providerData[0].photoURL!,
+    // )) as string;
     const user: AuthUser = {
       uid: authUser.uid!,
       id: authUser.providerData[0].uid,
@@ -166,6 +180,8 @@ export class AuthService {
       phoneNumber: authUser.providerData[0].phoneNumber!,
       email: authUser.email!,
       isVerified: authUser.emailVerified,
+      creationTime: authUser.metadata.creationTime,
+      lastLoginTime: authUser.metadata.lastSignInTime,
     };
     return user;
   }
@@ -194,5 +210,26 @@ export class AuthService {
 
   updatePhotoURL(uid: string, url: string): Promise<void> {
     return updateDoc(this.authUserDocRef(uid), { avatarURL: url });
+  }
+
+  private async getBase64ImageFromUrl(imageUrl: string) {
+    var res = await fetch(imageUrl);
+    var blob = await res.blob();
+
+    return new Promise((resolve, reject) => {
+      var reader = new FileReader();
+      reader.addEventListener(
+        'load',
+        function () {
+          resolve(reader.result);
+        },
+        false,
+      );
+
+      reader.onerror = () => {
+        return reject(this);
+      };
+      reader.readAsDataURL(blob);
+    });
   }
 }

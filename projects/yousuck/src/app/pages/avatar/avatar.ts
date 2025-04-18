@@ -396,9 +396,8 @@ export class AvatarComponent implements OnInit, AfterViewInit {
       this.context.drawImage(img, 0, 0);
       DOMURL.revokeObjectURL(url);
 
-      var imgURI = this.canvas.nativeElement
-        .toDataURL('image/png')
-        .replace('image/png', 'image/octet-stream');
+      var imgURI = this.canvas.nativeElement.toDataURL('image/png');
+      // .replace('image/png', 'image/octet-stream');  // this allows to download the image
       // aquí va lo bueno
       // this.triggerDownload(imgURI);
       // console.log(imgURI);

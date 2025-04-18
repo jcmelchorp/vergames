@@ -25,7 +25,7 @@ import { AvatarModule } from 'primeng/avatar';
             <p-avatar
               *ngIf="user.photoURL; else nophoto"
               class="img-fluid rounded-circle"
-              image="{{ user.photoURL }}"
+              [image]="user.photoURL"
               size="xlarge"
               shape="circle"
             ></p-avatar>
@@ -33,7 +33,7 @@ import { AvatarModule } from 'primeng/avatar';
           <p-avatar
             *ngIf="user.avatarURL; else nophoto"
             class="img-fluid rounded-circle"
-            image="{{ user.avatarURL }}"
+            [image]="user.avatarURL"
             size="xlarge"
             shape="circle"
           ></p-avatar>
@@ -54,37 +54,6 @@ import { AvatarModule } from 'primeng/avatar';
         </h2>
       </div>
     </header>
-
-    <!-- bit of a bio; who are you? -->
-    <!-- <div class="profile-bio">
-      <p>
-        Conoce las <a [routerLink]="['/policy']">políticas de privacidad </a>de
-        tus datos.
-      </p>
-    </div> -->
-    <!-- some social links to show off -->
-    <!-- <ul class="profile-social-links">
-      <li>
-        <a target="_blank" href="https://www.facebook.com/creativedonut">
-          <i class="fa fa-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a target="_blank" href="https://twitter.com/dropyourbass">
-          <i class="fa fa-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a target="_blank" href="https://github.com/vipulsaxena">
-          <i class="fa fa-github"></i>
-        </a>
-      </li>
-      <li>
-        <a target="_blank" href="https://www.behance.net/vipulsaxena">
-          <i class="fa fa-behance"></i>
-        </a>
-      </li>
-    </ul> -->
   </aside>`,
 })
 export class Profile {

@@ -154,10 +154,16 @@ export class AppTopbar {
     }));
   }
 
-  signOut() {
+  async signOut() {
     try {
-      this.authService.logout().then(() => this.router.navigateByUrl('/'));
-      console.log('User signed out');
+      // this.authService.logout().subscribe({
+      //   next: () => {
+      //     this.router.navigateByUrl('/');
+      //   },
+      // });
+      await this.authService
+        .logout()
+        .then(() => this.router.navigateByUrl('/'));
     } catch (error) {
       console.error('Sign out error:', error);
       // Handle the error appropriately, e.g., show a message to the user

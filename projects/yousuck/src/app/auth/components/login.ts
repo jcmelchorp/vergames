@@ -152,17 +152,21 @@ export class Login {
     };
 
     try {
-      await this.authService.login(credential);
-      this.router.navigateByUrl('/u');
+      await this.authService
+        .login(credential)
+        .then(() => this.router.navigateByUrl('/u'));
+
       // this.openSnackBar();
     } catch (error) {
       console.error('Google Sign-In error:', error);
     }
   }
-  async googleLogin(): Promise<void> {
+  async googleLogin() {
     try {
-      await this.authService.googleLogin();
-      this.router.navigateByUrl('/u');
+      await this.authService
+        .googleLogin()
+        .then(() => this.router.navigateByUrl('/u'));
+
       // this.openSnackBar();
     } catch (error) {
       console.error('Google Sign-In error:', error);

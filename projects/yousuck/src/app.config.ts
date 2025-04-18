@@ -34,7 +34,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZoneChangeDetection({ eventCoalescing: false }),
     provideRouter(
       appRoutes,
       withInMemoryScrolling({
