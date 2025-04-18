@@ -13,6 +13,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  User,
   user,
   UserCredential,
 } from '@angular/fire/auth';
@@ -28,7 +29,7 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 import { User as AuthUser } from '../models/user.model';
-import { from, Observable, of, switchMap, tap } from 'rxjs';
+import { from, map, mergeMap, Observable, of, switchMap, tap } from 'rxjs';
 import { firebaseSerialize } from '../models/firebase.model';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -66,12 +67,17 @@ export class AuthService {
   authUserDocRef = (uid: string) =>
     doc(this._fstore, `${this.USERS}/${uid}`).withConverter(assignTypes());
   private userAuthProfile$ = user(this._auth).pipe(
-    switchMap((user) => {
+    mergeMap((user) => {
       if (!user?.uid) {
         return of(null);
       }
-      return docData(this.authUserDocRef(user?.uid));
+      return docData(this.authUserDocRef(user?.uid)).pipe(
+        map((userData) => {
+          return { ...this._mergeAuthUser(user), ...userData };
+        }),
+      );
     }),
+    tap((user) => console.log('userAuthProfile:', user)),
   );
   userAuthProfile = toSignal(this.userAuthProfile$!);
   /* Auth Methods */
@@ -107,12 +113,14 @@ export class AuthService {
   }
 
   async signup(email: string, password: string): Promise<void> {
-    await createUserWithEmailAndPassword(
+    createUserWithEmailAndPassword(
       this._auth,
       email.trim(),
       password.trim(),
-    ).then((result) => this._mergeAuthUser(result));
-
+    ).then(async (result) => {
+      let mergedUser = await this._mergeAuthUser(result.user);
+      this.createUser(mergedUser).then(() => user);
+    });
     const actionCodeSettings = {
       url: 'https://yousuck.web.app',
       iOS: {
@@ -130,8 +138,8 @@ export class AuthService {
     //await applyActionCode(this._auth, code);
   }
 
-  logout(): Promise<void> {
-    return signOut(this._auth);
+  async logout(): Promise<void> {
+    return await signOut(this._auth);
     // return await this.updateOnlineStatus(false)
     //   .then(() => signOut(this._auth))
     //   .catch(() => this.updateOnlineStatus(true));
@@ -147,19 +155,19 @@ export class AuthService {
       });
   }
 
-  private async _mergeAuthUser(auth: UserCredential): Promise<AuthUser> {
+  private _mergeAuthUser(authUser: User): AuthUser {
     const user: AuthUser = {
-      uid: auth.user.uid!,
-      id: auth.user.providerData[0].uid,
-      authPhotoURL: auth.user.providerData[0].photoURL!,
-      photoURL: auth.user.photoURL!,
-      displayName: auth.user.providerData[0].displayName!,
-      username: auth.user.email!.split('@')[0],
-      phoneNumber: auth.user.providerData[0].phoneNumber!,
-      email: auth.user.email!,
-      isVerified: auth.user.emailVerified,
+      uid: authUser.uid!,
+      id: authUser.providerData[0].uid,
+      authPhotoURL: authUser.providerData[0].photoURL!,
+      photoURL: authUser.photoURL!,
+      displayName: authUser.providerData[0].displayName!,
+      username: authUser.email!.split('@')[0],
+      phoneNumber: authUser.providerData[0].phoneNumber!,
+      email: authUser.email!,
+      isVerified: authUser.emailVerified,
     };
-    return setDoc(this.authUserDocRef(user.uid!), user).then(() => user);
+    return user;
   }
   /* User Methods */
   checkAdminRole(uid: string): Promise<boolean> {
