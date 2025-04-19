@@ -11,7 +11,7 @@ import {
 export class SnackService {
   constructor(private snackBar: MatSnackBar) {}
 
-  justMessage(message) {
+  justMessage(message: any) {
     this.snackBar.open(message, 'Ok', {
       duration: 2000,
     });
@@ -36,7 +36,7 @@ export class SnackService {
       actionString: string;
       extra: boolean;
       message: string;
-    }
+    },
   ) {
     const config = new MatSnackBarConfig();
     config.verticalPosition = conf.vPos;
@@ -46,7 +46,7 @@ export class SnackService {
     return this.snackBar.open(
       conf.message,
       conf.action ? conf.actionString : undefined,
-      config
+      config,
     );
   }
 }
