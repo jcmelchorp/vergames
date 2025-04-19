@@ -30,7 +30,7 @@ export class WebServiceWorkerService implements OnDestroy {
       // If service worker is enabled
       console.log('Service worker running.');
       this.serviceSubscriptions.push(
-        interval(15 * 1000).subscribe(() => this.swUpdate.checkForUpdate()),
+        interval(5 * 1000).subscribe(() => this.swUpdate.checkForUpdate()),
       );
       this.serviceSubscriptions.push(
         this.swUpdate.versionUpdates.subscribe((evt) => {
@@ -52,9 +52,14 @@ export class WebServiceWorkerService implements OnDestroy {
           console.log(
             'App is in unrecoverable state. Reloading to avoid chunk load issue.',
           );
-          //To do, may be prompt the user first. before loading the page
-
-          //window.location.reload();
+          this.snack
+            .messageWithReload(
+              'App is in unrecoverable state. Reloading to avoid chunk load issue.',
+              'Ok',
+            )
+            ?.afterDismissed()
+            .subscribe(() => window.location.reload());
+          window.location.reload();
         }),
       );
     }
