@@ -102,7 +102,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                 >
               </span>
             </a>
-            <p-button label="Go to Dashboard" routerLink="/u/" />
+            <j-button label="Go to Dashboard" routerLink="/u/" />
           </div>
         </div>
       </div>

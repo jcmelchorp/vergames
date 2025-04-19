@@ -46,7 +46,20 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideAnimationsAsync(),
     providePrimeNG({
-      theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } },
+      theme: {
+        preset: Aura,
+        options: {
+          prefix: 'p',
+          darkModeSelector: '.app-dark',
+          cssLayer: false,
+        },
+      },
+      zIndex: {
+        modal: 1100, // dialog, sidebar
+        overlay: 1000, // dropdown, overlaypanel
+        menu: 1000, // overlay menus
+        tooltip: 1100, // tooltip
+      },
     }),
     provideFirebaseApp(() => initializeApp(environment.firebaseOptions)),
     provideAuth(() => {

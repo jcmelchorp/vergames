@@ -9,12 +9,14 @@ import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
     ButtonModule,
+    FloatLabelModule,
     CheckboxModule,
     InputTextModule,
     PasswordModule,
@@ -33,7 +35,7 @@ import { AuthService } from '../services/auth.service';
           style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"
         >
           <div
-            class="w-full bg-surface-0 dark:bg-surface-900 py-5 px-5 sm:px-15"
+            class="w-[500px] bg-surface-0 dark:bg-surface-900 py-20 px-20 sm:px-20"
             style="border-radius: 53px"
           >
             <div class="text-center mb-4">
@@ -58,7 +60,7 @@ import { AuthService } from '../services/auth.service';
                 Registro
               </div>
               <span
-                class="text-surface-700 dark:text-surface-0  font-medium dark:font-normal text-l"
+                class="text-surface-700 dark:text-surface-0 font-medium dark:font-normal text-l"
                 >Si ya estás inscrito, ingresa
                 <a
                   (click)="router.navigate(['/a/login'])"
@@ -69,46 +71,40 @@ import { AuthService } from '../services/auth.service';
             </div>
 
             <div>
-              <label
-                for="email1"
-                class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
-                >Correo electrónico</label
-              >
-              <input
-                pInputText
-                id="email1"
-                type="text"
-                placeholder="Correo electrónico"
-                class="w-full md:w-[30rem] mb-4"
-                [(ngModel)]="email"
-              />
+              <p-floatlabel variant="on">
+                <input
+                  pInputText
+                  id="email1"
+                  type="text"
+                  styleClass="w-full md:w-[30rem]"
+                  [fluid]="true"
+                  [(ngModel)]="email"
+                />
+                <label for="email1">Correo electrónico</label>
+              </p-floatlabel>
 
-              <label
-                for="password1"
-                class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
-                >Contraseña</label
-              >
-              <p-password
-                id="password1"
-                [(ngModel)]="password"
-                placeholder="Contraseña"
-                [toggleMask]="true"
-                styleClass="my-4"
-                [fluid]="true"
-                [feedback]="false"
-              ></p-password>
+              <p-floatlabel variant="on">
+                <p-password
+                  [(ngModel)]="password"
+                  [toggleMask]="true"
+                  styleClass="w-full my-4"
+                  [fluid]="true"
+                  [feedback]="true"
+                  inputId="password1"
+                  promptLabel="Choose a password"
+                  weakLabel="Débil"
+                  mediumLabel="Aceptable"
+                  strongLabel="Seguro"
+                />
+                <label for="password1">Contraseña</label>
+              </p-floatlabel>
 
-              <!-- <label
-                for="password2"
-                class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
-                >Password</label
-              > -->
               <p-password
                 id="password2"
                 [(ngModel)]="password2"
                 placeholder="Confirmar contraseña"
                 [toggleMask]="true"
-                styleClass="my-4"
+                styleClass="w-full my-4"
                 [fluid]="true"
                 [feedback]="false"
               ></p-password>
@@ -130,7 +126,7 @@ import { AuthService } from '../services/auth.service';
               </div> -->
               <p-button
                 label="Registro"
-                styleClass="w-full my-2"
+                styleClass="w-full my-4"
                 raised
                 (click)="registerByEmail()"
               ></p-button>

@@ -111,7 +111,7 @@ import { User } from '../../auth/models/user.model';
               routerLink="/u/pages/profile"
             >
               <i class="pi pi-user"></i>
-              <!-- <p-avatar
+              <!-- <j-avatar
               *ngIf="user.photoURL; else nophoto"
               image="{{ user!.photoURL }}"
               shape="circle"

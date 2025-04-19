@@ -8,8 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { AuthService } from '../services/auth.service';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 export interface Credential {
   email: string;
@@ -20,6 +19,7 @@ export interface Credential {
   standalone: true,
   imports: [
     ButtonModule,
+    FloatLabelModule,
     CheckboxModule,
     InputTextModule,
     PasswordModule,
@@ -33,12 +33,12 @@ export interface Credential {
     <div
       class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden"
     >
-      <div class="flex flex-col items-center justify-center">
+      <div class="flex flex-col items-center justify-center min-w-500">
         <div
           style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"
         >
           <div
-            class="w-full bg-surface-0 dark:bg-surface-900 py-5 px-5 sm:px-15"
+            class="w-[500px] bg-surface-0 dark:bg-surface-900 py-20 px-20 sm:px-20"
             style="border-radius: 53px"
           >
             <div class="text-center mb-4">
@@ -74,39 +74,32 @@ export interface Credential {
             </div>
 
             <div>
-              <label
-                for="email1"
-                class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
-                >Correo electrónico</label
-              >
-              <input
-                pInputText
-                id="email1"
-                type="text"
-                placeholder="Correo electrónico"
-                class="w-full md:w-[30rem] mb-4"
-                [fluid]="true"
-                [(ngModel)]="email"
-              />
+              <p-floatlabel variant="on">
+                <input
+                  pInputText
+                  id="email1"
+                  type="text"
+                  styleClass="w-full md:w-[30rem]"
+                  [fluid]="true"
+                  [(ngModel)]="email"
+                />
+                <label for="email1">Correo electrónico</label>
+              </p-floatlabel>
 
-              <label
-                for="password1"
-                class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2"
-                >Contraseña</label
-              >
-              <p-password
-                id="password1"
-                [(ngModel)]="password"
-                placeholder="Contraseña"
-                [toggleMask]="true"
-                styleClass="mb-4"
-                [fluid]="true"
-                [feedback]="false"
-              ></p-password>
-
+              <p-floatlabel variant="on">
+                <p-password
+                  [(ngModel)]="password"
+                  [toggleMask]="false"
+                  styleClass="w-full my-4"
+                  [fluid]="true"
+                  [feedback]="true"
+                  inputId="password1"
+                />
+                <label for="password1">Contraseña</label>
+              </p-floatlabel>
               <p-button
                 label="Iniciar sesión"
-                styleClass="w-full my-2"
+                styleClass="w-full my-4"
                 raised
                 (click)="loginByEmail()"
               ></p-button>
