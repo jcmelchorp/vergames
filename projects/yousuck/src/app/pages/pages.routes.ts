@@ -16,11 +16,17 @@ export default [
   { path: 'avatar', component: AvatarComponent },
   {
     path: 'games',
-    canDeactivate: [preventUnsavedChanges],
+    // canDeactivate: [preventUnsavedChanges],
     component: Games,
     children: [
-      { path: '', component: HomeGamesComponent },
-      { path: 'favorites', component: FavoritesComponent },
+      {
+        path: '',
+        loadComponent: () => import('./games/home/home-games.component'),
+      },
+      {
+        path: 'favorites',
+        loadComponent: () => import('./games/favorites/favorites.component'),
+      },
     ],
   },
   { path: '**', redirectTo: '/notfound' },

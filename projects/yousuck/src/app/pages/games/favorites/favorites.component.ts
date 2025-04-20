@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { GameCardComponent } from '../components/game-card.component';
 import { GamesService } from '../services/games.service';
+import { GamesStore } from '../games.store';
 
 @Component({
   selector: 'app-home',
@@ -18,8 +19,8 @@ import { GamesService } from '../services/games.service';
       </div>
 
       <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-        @for(game of gamesToShow(); track game.id) {
-        <app-game-card [game]="game" />
+        @for (game of gamesStore.gamesToShow(); track game.id) {
+          <app-game-card [game]="game" />
         }
       </div>
     </div>
@@ -27,26 +28,9 @@ import { GamesService } from '../services/games.service';
   imports: [GameCardComponent],
 })
 export default class FavoritesComponent {
-  gamesService = inject(GamesService);
-
-  games = this.gamesService.favoritesGames;
-
-  query = signal<string>('');
-
-  gamesToShow = computed(() => {
-    const query = this.query();
-    const games = this.games();
-
-    if (!query) {
-      return games;
-    }
-
-    return games.filter((game) => {
-      return game.title.toLowerCase().includes(query.toLowerCase());
-    });
-  });
+  gamesStore = inject(GamesStore);
 
   search(value: string) {
-    this.query.set(value);
+    this.gamesStore.setQuery(value);
   }
 }

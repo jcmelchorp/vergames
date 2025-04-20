@@ -28,18 +28,18 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { environment } from './environments/environment';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import Aura from '@primeng/themes/aura';
+import Material from '@primeng/themes/material';
 import { providePrimeNG } from 'primeng/config';
 import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: false }),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       appRoutes,
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
-        scrollPositionRestoration: 'enabled',
+        scrollPositionRestoration: 'top',
       }),
       withEnabledBlockingInitialNavigation(),
     ),
@@ -47,7 +47,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: Material,
         options: {
           prefix: 'p',
           darkModeSelector: '.app-dark',

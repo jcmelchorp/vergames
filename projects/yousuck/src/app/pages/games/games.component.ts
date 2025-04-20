@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Toolbar } from 'primeng/toolbar';
+import { GamesStore } from './games.store';
+import { signalStore, withState } from '@ngrx/signals';
 
 @Component({
   selector: 'app-games',
-  standalone: true,
   imports: [RouterOutlet, RouterLink, Toolbar],
   template: `
     <div>
@@ -12,10 +13,10 @@ import { Toolbar } from 'primeng/toolbar';
       <p-toolbar styleClass="mb-6" class="flex justify-center">
         <ul class="flex gap-x-4">
           <li>
-            <a [routerLink]="['/pages/games']">Games</a>
+            <a routerLink="/u/pages/games">Games</a>
           </li>
           <li>
-            <a [routerLink]="['/pages/games/favorites']">Favorites</a>
+            <a routerLink="/u/pages/games/favorites">Favorites</a>
           </li>
         </ul>
       </p-toolbar>
@@ -24,6 +25,4 @@ import { Toolbar } from 'primeng/toolbar';
     <router-outlet />
   `,
 })
-export class Games {
-  title = 'games2play';
-}
+export class Games {}

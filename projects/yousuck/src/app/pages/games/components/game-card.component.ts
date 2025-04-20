@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { Game } from '../interfaces/game.interface';
+import { GamesStore } from '../games.store';
 
 @Component({
   selector: 'app-game-card',

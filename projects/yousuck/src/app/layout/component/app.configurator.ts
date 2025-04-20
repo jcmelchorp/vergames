@@ -12,6 +12,7 @@ import { $t, updatePreset, updateSurfacePalette } from '@primeng/themes';
 import Aura from '@primeng/themes/aura';
 import Lara from '@primeng/themes/lara';
 import Nora from '@primeng/themes/nora';
+import Material from '@primeng/themes/material';
 import { PrimeNG } from 'primeng/config';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { LayoutService } from '../service/layout.service';
@@ -20,6 +21,7 @@ const presets = {
   Aura,
   Lara,
   Nora,
+  Material,
 } as const;
 
 declare type KeyOfType<T> = keyof T extends infer U ? U : never;
