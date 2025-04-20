@@ -4,7 +4,7 @@ import { BehaviorSubject, Subscription, filter, interval, map } from 'rxjs';
 import { SnackService } from './snack.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MessageService, ToastMessageOptions } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root',
@@ -14,13 +14,18 @@ export class WebServiceWorkerService implements OnDestroy {
     false,
   );
   serviceSubscriptions: Subscription[] = [];
-  private messageService: MessageService = inject(MessageService);
-  private swUpdate: SwUpdate = inject(SwUpdate);
+  // private messageService: MessageService = inject(MessageService);
+  // private swUpdate: SwUpdate = inject(SwUpdate);
+  // private router: Router = inject(Router);
+  // private titleService: Title = inject(Title);
+  // private metaService: Meta = inject(Meta);
 
   constructor(
+    private messageService: MessageService,
+    private swUpdate: SwUpdate,
+    private router: Router,
     private titleService: Title,
     private metaService: Meta,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
     this.initialize();
@@ -29,22 +34,32 @@ export class WebServiceWorkerService implements OnDestroy {
   initialize() {
     if (this.swUpdate.isEnabled) {
       // If service worker is enabled
-      console.log('Service worker running.');
-      // this.serviceSubscriptions.push(
-      //   interval(5 * 1000).subscribe(() => this.swUpdate.checkForUpdate()),
-      // );
-      this.swUpdate.checkForUpdate();
+      console.log('Service Worker running...');
+      // this.messageService.add({
+      //   key: 'swUpdate',
+      //   severity: 'success',
+      //   summary: 'Service worker update',
+      //   detail: 'Service worker running',
+      //   sticky: true,
+      // } as ToastMessageOptions);
+      this.serviceSubscriptions.push(
+        interval(6 * 1000).subscribe(() => {
+          this.swUpdate.checkForUpdate();
+        }),
+      );
       this.serviceSubscriptions.push(
         this.swUpdate.versionUpdates.subscribe((evt) => {
           console.log(evt);
           if (evt.type === 'VERSION_READY') {
             this.$isAnyNewUpdateAvailable.next(true);
             this.messageService.add({
-              severity: 'info',
-              summary:
-                'Se han hecho cambios desde la última visita. Actualiza la página para continuar',
-              detail: 'Ok',
-            });
+              key: 'swUpdate',
+              severity: 'warn',
+              summary: 'Nueva versión disponible.',
+              detail:
+                'Se han hecho cambios desde la última visita. Presiona F5.',
+              sticky: true,
+            } as ToastMessageOptions);
 
             // this.snack
             //   .messageWithReload(
@@ -64,10 +79,10 @@ export class WebServiceWorkerService implements OnDestroy {
           'App is in unrecoverable state. Reloading to avoid chunk load issue.',
         );
         this.messageService.add({
-          severity: 'info',
-          summary:
+          severity: 'danger',
+          summary: 'Error',
+          detail:
             'App is in unrecoverable state. Reloading to avoid chunk load issue.',
-          detail: 'Ok',
         });
 
         // this.snack

@@ -9,7 +9,13 @@ import { MessageService } from 'primeng/api';
   selector: 'app-root',
   standalone: true,
   imports: [RouterModule, ToastModule],
-  template: `<p-toast /> <router-outlet></router-outlet>`,
+  template: `<p-toast
+      key="swUpdate"
+      position="bottom-center"
+      (onClose)="reload()"
+      [baseZIndex]="5000"
+    ></p-toast
+    ><router-outlet></router-outlet>`,
   providers: [WebServiceWorkerService, MessageService],
 })
 export class AppComponent {
@@ -23,5 +29,8 @@ export class AppComponent {
         'Aplicación de nada, pero con un propósito. Yousuck es una aplicación que te ayuda a encontrar tu propósito en la vida.',
       image: 'screenshot01.png',
     });
+  }
+  reload() {
+    window.location.reload();
   }
 }
