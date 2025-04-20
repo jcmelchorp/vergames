@@ -6,20 +6,11 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
 import { AuthService } from '../../auth/services/auth.service';
-import { Observable } from 'rxjs';
-import { Avatar } from 'primeng/avatar';
-import { User } from '../../auth/models/user.model';
 
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [
-    RouterModule,
-    CommonModule,
-    // Avatar,
-    StyleClassModule,
-    AppConfigurator,
-  ],
+  imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
   template: ` <div class="layout-topbar">
     <div class="layout-topbar-logo-container">
       <button

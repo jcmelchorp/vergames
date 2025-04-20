@@ -2,12 +2,15 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ShellComponent } from './app/pages/shell/shell';
 import { WebServiceWorkerService } from './app/pages/service/webservice-worker.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, ShellComponent],
-  template: `<prmsc-shell></prmsc-shell> <router-outlet></router-outlet>`,
+  imports: [RouterModule, ToastModule],
+  template: `<p-toast /> <router-outlet></router-outlet>`,
+  providers: [WebServiceWorkerService, MessageService],
 })
 export class AppComponent {
   title = 'Yousuck - Aplicación de nada';

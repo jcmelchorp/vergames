@@ -31,7 +31,7 @@ import { User as AuthUser } from '../models/user.model';
 import { map, of, switchMap } from 'rxjs';
 import { firebaseSerialize } from '../models/firebase.model';
 import { toSignal } from '@angular/core/rxjs-interop';
-
+import { MessageService } from 'primeng/api';
 export interface Credential {
   email: string;
   password: string;
@@ -43,6 +43,7 @@ export class AuthService {
   private readonly USERS = 'users';
   private readonly _fstore = inject(Firestore);
   private readonly _auth = inject(Auth);
+
   assignTypes = () => {
     return {
       toFirestore(doc: AuthUser): DocumentData {
@@ -156,13 +157,7 @@ export class AuthService {
   }
 
   async sendPasswordResetEmails(email: string): Promise<void> {
-    sendPasswordResetEmail(this._auth, email)
-      .then(() => {
-        window.alert('Password reset email sent, check your inbox.');
-      })
-      .catch((error) => {
-        window.alert(error.message);
-      });
+    sendPasswordResetEmail(this._auth, email);
   }
 
   private _mergeAuthUser(authUser: User): AuthUser {

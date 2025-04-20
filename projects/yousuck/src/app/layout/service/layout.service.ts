@@ -29,7 +29,7 @@ export class LayoutService {
   isDarkInLocal = localStorage.getItem('yousuck-dark') === 'true';
   primaryLocal = localStorage.getItem('yousuck-primary') || 'emerald';
   surfaceLocal = localStorage.getItem('yousuck-surface');
-  presetsLocal = localStorage.getItem('yousuck-presets') || 'Aura';
+  presetsLocal = localStorage.getItem('yousuck-presets') || 'MAterial';
   menuModeLocal = localStorage.getItem('yousuck-menu-mode') || 'static';
 
   _config: layoutConfig = {

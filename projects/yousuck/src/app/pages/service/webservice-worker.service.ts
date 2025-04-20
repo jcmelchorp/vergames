@@ -1,9 +1,10 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { BehaviorSubject, Subscription, filter, interval, map } from 'rxjs';
 import { SnackService } from './snack.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +14,10 @@ export class WebServiceWorkerService implements OnDestroy {
     false,
   );
   serviceSubscriptions: Subscription[] = [];
+  private messageService: MessageService = inject(MessageService);
+  private swUpdate: SwUpdate = inject(SwUpdate);
 
   constructor(
-    private swUpdate: SwUpdate,
-    private snack: SnackService,
     private titleService: Title,
     private metaService: Meta,
     private router: Router,
@@ -29,40 +30,55 @@ export class WebServiceWorkerService implements OnDestroy {
     if (this.swUpdate.isEnabled) {
       // If service worker is enabled
       console.log('Service worker running.');
-      this.serviceSubscriptions.push(
-        interval(5 * 1000).subscribe(() => this.swUpdate.checkForUpdate()),
-      );
+      // this.serviceSubscriptions.push(
+      //   interval(5 * 1000).subscribe(() => this.swUpdate.checkForUpdate()),
+      // );
+      this.swUpdate.checkForUpdate();
       this.serviceSubscriptions.push(
         this.swUpdate.versionUpdates.subscribe((evt) => {
           console.log(evt);
           if (evt.type === 'VERSION_READY') {
             this.$isAnyNewUpdateAvailable.next(true);
-            this.snack
-              .messageWithReload(
+            this.messageService.add({
+              severity: 'info',
+              summary:
                 'Se han hecho cambios desde la última visita. Actualiza la página para continuar',
-                'Ok',
-              )
-              ?.afterDismissed()
-              .subscribe(() => window.location.reload());
+              detail: 'Ok',
+            });
+
+            // this.snack
+            //   .messageWithReload(
+            //     'Se han hecho cambios desde la última visita. Actualiza la página para continuar',
+            //     'Ok',
+            //   )
+            //   ?.afterDismissed()
+            //   .subscribe(() => window.location.reload()
+            // )
           }
         }),
       );
-      this.serviceSubscriptions.push(
-        this.swUpdate.unrecoverable.subscribe((evt) => {
-          console.log(
-            'App is in unrecoverable state. Reloading to avoid chunk load issue.',
-          );
-          this.snack
-            .messageWithReload(
-              'App is in unrecoverable state. Reloading to avoid chunk load issue.',
-              'Ok',
-            )
-            ?.afterDismissed()
-            .subscribe(() => window.location.reload());
-          window.location.reload();
-        }),
-      );
     }
+    this.serviceSubscriptions.push(
+      this.swUpdate.unrecoverable.subscribe((evt) => {
+        console.log(
+          'App is in unrecoverable state. Reloading to avoid chunk load issue.',
+        );
+        this.messageService.add({
+          severity: 'info',
+          summary:
+            'App is in unrecoverable state. Reloading to avoid chunk load issue.',
+          detail: 'Ok',
+        });
+
+        // this.snack
+        //   .messageWithReload(
+        //     'App is in unrecoverable state. Reloading to avoid chunk load issue.',
+        //     'Ok',
+        //   )
+        //   ?.afterDismissed()
+        //   .subscribe(() => window.location.reload());
+      }),
+    );
   }
 
   ngOnDestroy(): void {
@@ -113,10 +129,10 @@ export class WebServiceWorkerService implements OnDestroy {
       { name: 'date', content: '2025-04-18', scheme: 'YYYY-MM-DD' },
       { name: 'application-name', content: title },
       { name: 'apple-mobile-web-app-status-bar', content: 'black-translucent' },
-      { name: 'theme-color', content: '#1976d2' },
+      { name: 'theme-color', content: '#000000' },
       { name: 'apple-mobile-web-app-capable', content: 'yes' },
       { name: 'mobile-web-app-capable', content: 'yes' },
-      { name: 'msapplication-TileColor', content: '#2b5797' },
+      { name: 'msapplication-TileColor', content: '#000000' },
       {
         name: 'msapplication-square70x70logo',
         content: 'assets/icons/mstile-icon-128.png',
@@ -134,7 +150,7 @@ export class WebServiceWorkerService implements OnDestroy {
         content: 'assets/icons/mstile-icon-558-270.png',
       },
       // OpenGraph metatags
-      { property: 'og:title', content: title },
+      { property: 'og:title', content: 'beaverNet' },
       { property: 'og:type', content: 'website' },
       { property: 'og:site_name', content: title },
       {

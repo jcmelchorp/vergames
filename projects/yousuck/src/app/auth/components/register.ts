@@ -99,15 +99,18 @@ import { FloatLabelModule } from 'primeng/floatlabel';
                 <label for="password1">Contraseña</label>
               </p-floatlabel>
 
-              <p-password
-                id="password2"
-                [(ngModel)]="password2"
-                placeholder="Confirmar contraseña"
-                [toggleMask]="true"
-                styleClass="w-full my-4"
-                [fluid]="true"
-                [feedback]="false"
-              ></p-password>
+              <p-floatlabel variant="on">
+                <p-password
+                  id="password2"
+                  [(ngModel)]="password2"
+                  placeholder="Confirmar contraseña"
+                  [toggleMask]="true"
+                  styleClass="w-full my-4"
+                  [fluid]="true"
+                  [feedback]="false"
+                ></p-password>
+                <label for="password2">Confirma tu contraseña</label>
+              </p-floatlabel>
 
               <!-- <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                 <div class="flex items-center">
@@ -125,6 +128,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
                 >
               </div> -->
               <p-button
+                [disabled]="password !== password2 || password.length < 6"
                 label="Registro"
                 styleClass="w-full my-4"
                 raised

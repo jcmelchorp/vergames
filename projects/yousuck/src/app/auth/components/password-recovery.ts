@@ -9,6 +9,8 @@ import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { AuthService } from '../services/auth.service';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 export interface Credential {
   email: string;
@@ -26,10 +28,12 @@ export interface Credential {
     FormsModule,
     RouterModule,
     RippleModule,
+    ToastModule,
     AppFloatingConfigurator,
   ],
   template: `
     <app-floating-configurator />
+    <p-toast />
     <div
       class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden"
     >
@@ -60,16 +64,12 @@ export interface Credential {
               <div
                 class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4"
               >
-                Inicia sesión
+                Recupera tu contraseña.
               </div>
               <span
                 class="text-surface-700 dark:text-surface-0 font-medium dark:font-normal text-l"
-                >Si aun no te registras, ingresa
-                <a
-                  (click)="router.navigate(['/a/register'])"
-                  class="no-underline text-right cursor-pointer text-primary"
-                  >aquí</a
-                >.
+                >Escribe tu correo electrónico y te enviaremos un enlace para
+                restablecer tu contraseña.
               </span>
             </div>
 
@@ -86,96 +86,47 @@ export interface Credential {
                 <label for="email1">Correo electrónico</label>
               </p-floatlabel>
 
-              <p-floatlabel variant="on">
-                <p-password
-                  [(ngModel)]="password"
-                  [toggleMask]="true"
-                  styleClass="w-full my-4"
-                  [fluid]="true"
-                  [feedback]="false"
-                  inputId="password1"
-                />
-                <label for="password1">Contraseña</label>
-              </p-floatlabel>
               <p-button
-                label="Iniciar sesión"
+                label="Enviar enlase"
                 styleClass="w-full my-4"
                 raised
-                (click)="loginByEmail()"
+                (click)="sendPasswordRecovery()"
               ></p-button>
-              <div class="flex items-center justify-around mt-2 mb-2 gap-4">
-                <a
-                  (click)="router.navigate(['/a/password-recovery'])"
-                  class="font-medium no-underline text-right cursor-pointer text-primary"
-                  >¿Olvidaste tu contraseña?</a
-                >
-              </div>
-              <div class="mt-2 flex flex-row gap-4 justify-between">
-                <p-button severity="danger" raised (click)="googleLogin()">
-                  <i class="pi pi-google"></i>
-                  <span>&nbsp; Google</span>
-                </p-button>
-
-                <p-button severity="secondary" outlined (click)="guestLogin()">
-                  <i class="pi pi-user"></i>
-                  <span>&nbsp; Usuario de prueba</span>
-                </p-button>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   `,
+  providers: [MessageService],
 })
-export class Login {
+export class PasswordRecovery {
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
-  // _snackBar: MatSnackBar = inject(MatSnackBar);
   email: string = '';
 
-  password: string = '';
-
+  private messageService: MessageService = inject(MessageService);
   // checked: boolean = false;
 
-  async loginByEmail(): Promise<void> {
-    const credential: Credential = {
-      email: this.email,
-      password: this.password,
-    };
-
+  async sendPasswordRecovery(): Promise<void> {
     try {
-      await this.authService
-        .login(credential)
-        .then(() => this.router.navigateByUrl('/u'));
+      await this.authService.sendPasswordResetEmails(this.email).then(() => {
+        // this.router.navigateByUrl('/');
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Servicio de Identificación',
+          detail: 'Password reset email sent, check your inbox.',
+        });
+      });
 
       // this.openSnackBar();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Google Sign-In error:', error);
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Servicio de Identificación',
+        detail: error,
+      });
     }
   }
-  async googleLogin() {
-    try {
-      await this.authService
-        .googleLogin()
-        .then(() => this.router.navigateByUrl('/u'));
-
-      // this.openSnackBar();
-    } catch (error) {
-      console.error('Google Sign-In error:', error);
-    }
-  }
-
-  guestLogin(): void {
-    this.email = 'prueba@invitado.mail';
-    this.password = 'usuario';
-  }
-
-  // openSnackBar() {
-  //   return this._snackBar.open('Succesfully Log in 😀', 'Close', {
-  //     duration: 2500,
-  //     verticalPosition: 'top',
-  //     horizontalPosition: 'center',
-  //   });
-  // }
 }
