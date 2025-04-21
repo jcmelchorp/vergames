@@ -1,5 +1,12 @@
-import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, isDevMode } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -7,14 +14,21 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
+import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
+    AsyncPipe,
+    CommonModule,
+    ReactiveFormsModule,
     ButtonModule,
     FloatLabelModule,
     CheckboxModule,
@@ -22,7 +36,9 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     PasswordModule,
     FormsModule,
     RouterModule,
+    ToastModule,
     RippleModule,
+    MessageModule,
     AppFloatingConfigurator,
   ],
   template: `
@@ -70,22 +86,29 @@ import { FloatLabelModule } from 'primeng/floatlabel';
               </span>
             </div>
 
-            <div>
+            <form [formGroup]="formGroup" (ngSubmit)="registerByEmail()">
               <p-floatlabel variant="on">
                 <input
                   pInputText
-                  id="email1"
+                  id="email"
                   type="text"
                   styleClass="w-full md:w-[30rem]"
                   [fluid]="true"
-                  [(ngModel)]="email"
+                  formControlName="email"
                 />
-                <label for="email1">Correo electrónico</label>
+                <label for="email">Correo electrónico</label>
               </p-floatlabel>
+              @if (
+                formGroup.controls['email'].invalid &&
+                formGroup.controls['email'].dirty &&
+                formGroup.controls['email'].valueChanges
+              ) {
+                <small class="p-error">Errljkgor en correo electrónico</small>
+              }
 
               <p-floatlabel variant="on">
                 <p-password
-                  [(ngModel)]="password"
+                  formControlName="password1"
                   [toggleMask]="true"
                   styleClass="w-full my-4"
                   [fluid]="true"
@@ -101,9 +124,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 
               <p-floatlabel variant="on">
                 <p-password
-                  id="password2"
-                  [(ngModel)]="password2"
-                  placeholder="Confirmar contraseña"
+                  inputId="password2"
+                  formControlName="password2"
                   [toggleMask]="true"
                   styleClass="w-full my-4"
                   [fluid]="true"
@@ -112,50 +134,100 @@ import { FloatLabelModule } from 'primeng/floatlabel';
                 <label for="password2">Confirma tu contraseña</label>
               </p-floatlabel>
 
-              <!-- <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                <div class="flex items-center">
-                  <p-checkbox
-                    [(ngModel)]="checked"
-                    id="rememberme1"
-                    binary
-                    class="mr-2"
-                  ></p-checkbox>
-                  <label for="rememberme1">Remember me</label>
-                </div>
-                <span
-                  class="font-medium no-underline ml-2 text-right cursor-pointer text-primary"
-                  >Forgot password?</span
-                >
-              </div> -->
               <p-button
-                [disabled]="password !== password2 || password.length < 6"
+                [disabled]="formGroup.invalid"
                 label="Registro"
                 styleClass="w-full my-4"
                 raised
-                (click)="registerByEmail()"
+                type="submit"
               ></p-button>
-            </div>
+              @if (
+                formGroup.controls['email'].invalid &&
+                (formGroup.controls['email'].dirty ||
+                  formGroup.controls['email'].touched)
+              ) {
+                <div class="alert alert-danger">
+                  @if (
+                    formGroup.controls['email']!.getError('email') &&
+                    formGroup.valid
+                  ) {
+                    <p-message
+                      severity="error"
+                      class="p-inline-message p-inline-message-error"
+                      >Error en correo electrónico</p-message
+                    >
+                  }
+                  @if (formGroup.controls['password1'].getError('minlength')) {
+                    <span class="p-inline-message p-inline-message-error"
+                      >Must be at least 3 characters long.</span
+                    >
+                  }
+                </div>
+              }
+            </form>
+            <pre
+              >{{ getFormValidationErrors() | async | json }}
+</pre
+            >
           </div>
         </div>
       </div>
     </div>
   `,
+  providers: [MessageService],
 })
 export class Register {
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
-  _snackBar: MatSnackBar = inject(MatSnackBar);
-  email: string = '';
+  formGroup: FormGroup;
+  constructor(
+    private messageService: MessageService,
+    private fb: FormBuilder,
+  ) {
+    this.formGroup = this.fb.group({
+      email: [null, [Validators.required, Validators.email]],
+      password1: [null, [Validators.required, Validators.minLength(6)]],
+      password2: [null, [Validators.required, Validators.minLength(6)]],
+    });
+  }
 
-  password: string = '';
-  password2: string = '';
-
-  checked: boolean = false;
+  // checked: boolean = false;
 
   registerByEmail(): void {
-    if (this.password == this.password2) {
-      this.authService.signup(this.email, this.password);
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
+    let email = this.formGroup.controls['email'].value;
+    let password1 = this.formGroup.controls['password1'].value;
+    let password2 = this.formGroup.controls['password2'].value;
+    if (password1 === password2) {
+      this.authService.signup(email, password1);
       this.router.navigateByUrl('/a/verification');
+    }
+  }
+
+  getFormValidationErrors() {
+    if (isDevMode()) {
+      const result: { key: string; errors: {}[] }[] = [];
+      Object.keys(this.formGroup.controls).forEach((key) => {
+        const controlErrors = this.formGroup.get(key)!.errors;
+        let errors: any[] = [];
+        if (controlErrors !== null) {
+          Object.keys(controlErrors!).forEach((keyError) => {
+            let error = keyError;
+            let value = controlErrors![keyError];
+            errors.push({ error, value });
+          });
+          result.push({
+            key,
+            errors,
+          });
+        }
+      });
+      return of(result);
+    } else {
+      return of([]);
     }
   }
 }
