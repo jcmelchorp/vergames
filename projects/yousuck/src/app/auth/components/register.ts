@@ -21,6 +21,8 @@ import { MessageModule } from 'primeng/message';
 import { CommonModule } from '@angular/common';
 import { of, Subscription } from 'rxjs';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -32,6 +34,8 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     CheckboxModule,
     InputTextModule,
     PasswordModule,
+    IconFieldModule,
+    InputIconModule,
     FormsModule,
     RouterModule,
     ToastModule,
@@ -50,7 +54,7 @@ import { KeyFilterModule } from 'primeng/keyfilter';
           style="border-radius: 26px; padding: 0.2rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 90%)"
         >
           <div
-            class="w-[500px] bg-surface-0 dark:bg-surface-900 py-20 px-20 sm:px-20"
+            class="min-w-[80%] bg-surface-0 dark:bg-surface-900 py-20 px-20 sm:px-20"
             style="border-radius: 24px"
           >
             <div class="text-center mb-4">
@@ -95,7 +99,7 @@ import { KeyFilterModule } from 'primeng/keyfilter';
                   <input
                     pInputText
                     type="text"
-                    styleClass="w-full"
+                    styleClass="w-full md:w-[30rem]"
                     [fluid]="true"
                     formControlName="email"
                     class="form-control"
@@ -183,17 +187,29 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 
               <div class="my-4">
                 <p-floatlabel variant="on">
+                  <!-- <p-iconfield>
+                    <p-inputicon
+                      *ngIf="
+                        formGroup.get('password2')?.value ===
+                          formGroup.get('password1')?.value &&
+                        formGroup.get('password2')?.dirty &&
+                        formGroup.get('password1')?.dirty
+                      "
+                      class="pi pi-check"
+                    /> -->
                   <p-password
                     inputId="password2"
                     formControlName="password2"
                     [ngClass]="{
-                      'is-invalid': formFields['password1'].errors,
+                      'is-invalid': formFields['password2'].errors,
                     }"
                     [toggleMask]="true"
                     styleClass="w-full"
                     [fluid]="true"
                     [feedback]="false"
                   ></p-password>
+                  <!-- </p-iconfield> -->
+
                   <label for="password2">Confirma tu contraseña</label>
                 </p-floatlabel>
                 <div
