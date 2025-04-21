@@ -209,7 +209,7 @@ export class Register {
 
   getFormValidationErrors() {
     if (isDevMode()) {
-      const result: { key: string; errors: {}[] }[] = [];
+      const result: { key: string; errors?: {}[] }[] = [];
       Object.keys(this.formGroup.controls).forEach((key) => {
         const controlErrors = this.formGroup.get(key)!.errors;
         let errors: any[] = [];

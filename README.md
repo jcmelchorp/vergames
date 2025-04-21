@@ -1,59 +1,85 @@
-# Vergames
+# VerGames
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.7.
+VerGames es una plataforma web diseñada para ofrecer una variedad de juegos y aplicaciones interactivas. Este proyecto consta de dos aplicaciones principales: **VerGames** y **YouSuck**, cada una con características únicas y tecnologías modernas.
 
-## Development server
+## Descripción del Proyecto
 
-To start a local development server, run:
+### VerGames
 
-```bash
-ng serve
-```
+- **Descripción**: Una colección de juegos clásicos como Tetris, Buscaminas, Ahorcado, entre otros. Cada juego está diseñado para ser intuitivo y divertido, con gráficos simples pero atractivos.
+- **Framework**: Angular 19.
+- **Diseño**: Personalizado con Angular Material para garantizar una experiencia de usuario moderna y responsiva.
+- **Backend**: Firebase (Auth, Database, Firestore) para autenticación y almacenamiento de datos en tiempo real.
+- **Captura de Pantalla**: ![VerGames Screenshot](https://vergames.web.app/assets/screenshots/vergames.png)
+- **Demo**: [VerGames Demo](https://vergames.web.app)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### YouSuck
 
-## Code scaffolding
+- **Descripción**: Una aplicación complementaria que permite a los usuarios personalizar avatares con múltiples opciones, como peinados, ropa y accesorios. También incluye funcionalidades adicionales para gestionar perfiles.
+- **Framework**: Angular 19.
+- **Estado Global**: Implementado con Signals y NgRx para un manejo eficiente del estado de la aplicación.
+- **Diseño**: PrimeNG para una interfaz moderna y profesional.
+- **Captura de Pantalla**: ![YouSuck Screenshot](https://yousuck.web.app/assets/screenshots/yousuck.png)
+- **Demo**: [YouSuck Demo](https://yousuck.web.app)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Tecnologías Utilizadas
 
-```bash
-ng generate component component-name
-```
+- **Frontend**: Angular 19.
+- **UI Libraries**: Angular Material, PrimeNG.
+- **Estado Global**: NgRx con Signals.
+- **Backend**: Firebase (Authentication, Firestore Database).
+- **Hosting**: Firebase Hosting.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Características
 
-```bash
-ng generate --help
-```
+- **VerGames**:
 
-## Building
+  - Juegos clásicos como Tetris, Buscaminas, Ahorcado, entre otros.
+  - Interfaz amigable y responsiva.
+  - Integración con Firebase para autenticación y almacenamiento de datos.
 
-To build the project run:
+- **YouSuck**:
+  - Personalización de avatares con múltiples opciones.
+  - Arquitectura standalone para mayor modularidad.
+  - Uso de Signals para un manejo eficiente del estado.
+  - **PWA** con soporte para un web service, permitiendo funcionalidad offline y mejor rendimiento.
 
-```bash
-ng build
-```
+## Instalación y Configuración
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tu-usuario/vergames.git
+   cd vergames
+   ```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+3. Configura Firebase:
 
-## Running unit tests
+   - Crea un proyecto en Firebase.
+   - Configura Authentication y Firestore.
+   - Agrega el archivo `environment.ts` con las credenciales de Firebase.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+4. Ejecuta la aplicación:
+   ```bash
+   ng serve
+   ```
 
-```bash
-ng test
-```
+## Vistas Previas
 
-## Running end-to-end tests
+### VerGames
 
-For end-to-end (e2e) testing, run:
+![VerGames Preview](https://vergames.web.app/assets/preview.png)
 
-```bash
-ng e2e
-```
+### YouSuck
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+![YouSuck Preview](https://yousuck.web.app/assets/preview.png)
 
-## Additional Resources
+## Contribuciones
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request para sugerencias o mejoras.
+
+## Licencia
+
+Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
