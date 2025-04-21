@@ -1,10 +1,9 @@
-import { Component, inject, isDevMode } from '@angular/core';
+import { Component, inject, isDevMode, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -19,14 +18,13 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
-import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
-import { of } from 'rxjs';
-
+import { CommonModule } from '@angular/common';
+import { of, Subscription } from 'rxjs';
+import { KeyFilterModule } from 'primeng/keyfilter';
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
-    AsyncPipe,
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
@@ -39,6 +37,7 @@ import { of } from 'rxjs';
     ToastModule,
     RippleModule,
     MessageModule,
+    KeyFilterModule,
     AppFloatingConfigurator,
   ],
   template: `
@@ -86,89 +85,178 @@ import { of } from 'rxjs';
               </span>
             </div>
 
-            <form [formGroup]="formGroup" (ngSubmit)="registerByEmail()">
-              <p-floatlabel variant="on">
-                <input
-                  pInputText
-                  id="email"
-                  type="text"
-                  styleClass="w-full md:w-[30rem]"
-                  [fluid]="true"
-                  formControlName="email"
-                />
-                <label for="email">Correo electrónico</label>
-              </p-floatlabel>
-              @if (
-                formGroup.controls['email'].invalid &&
-                formGroup.controls['email'].dirty &&
-                formGroup.controls['email'].valueChanges
-              ) {
-                <small class="p-error">Errljkgor en correo electrónico</small>
-              }
+            <form
+              [formGroup]="formGroup"
+              (ngSubmit)="registerByEmail()"
+              novalidate
+            >
+              <div class="my-4">
+                <p-floatlabel variant="on">
+                  <input
+                    pInputText
+                    type="text"
+                    styleClass="w-full"
+                    [fluid]="true"
+                    formControlName="email"
+                    class="form-control"
+                    inputId="email"
+                    [ngClass]="{
+                      'is-invalid': formFields['email'].errors,
+                    }"
+                    [pKeyFilter]="blockSpace"
+                  />
+                  <label for="email">Correo electrónico</label>
+                </p-floatlabel>
+                <div
+                  *ngIf="
+                    formFields['email'].errors && formFields['email'].dirty
+                  "
+                  class="invalid-feedback"
+                >
+                  <p-message
+                    *ngIf="formFields['email'].errors['required']"
+                    severity="error"
+                    size="small"
+                    variant="simple"
+                    class="p-error p-inline-message p-inline-message-error"
+                    >Se requiere un correo electrónico</p-message
+                  >
 
-              <p-floatlabel variant="on">
-                <p-password
-                  formControlName="password1"
-                  [toggleMask]="true"
-                  styleClass="w-full my-4"
-                  [fluid]="true"
-                  [feedback]="true"
-                  inputId="password1"
-                  promptLabel="Choose a password"
-                  weakLabel="Débil"
-                  mediumLabel="Aceptable"
-                  strongLabel="Seguro"
-                />
-                <label for="password1">Contraseña</label>
-              </p-floatlabel>
+                  <p-message
+                    *ngIf="formFields['email'].errors['email']"
+                    severity="error"
+                    size="small"
+                    variant="simple"
+                    class="p-error p-inline-message p-inline-message-error"
+                    >Correo electrónico no válido</p-message
+                  >
+                </div>
+              </div>
 
-              <p-floatlabel variant="on">
-                <p-password
-                  inputId="password2"
-                  formControlName="password2"
-                  [toggleMask]="true"
-                  styleClass="w-full my-4"
-                  [fluid]="true"
-                  [feedback]="false"
-                ></p-password>
-                <label for="password2">Confirma tu contraseña</label>
-              </p-floatlabel>
+              <div class="my-4">
+                <p-floatlabel variant="on">
+                  <p-password
+                    formControlName="password1"
+                    [toggleMask]="true"
+                    styleClass="w-full"
+                    [ngClass]="{
+                      'is-invalid': formFields['password1'].errors,
+                    }"
+                    [fluid]="true"
+                    [feedback]="true"
+                    inputId="password1"
+                    promptLabel="Choose a password"
+                    weakLabel="Débil"
+                    mediumLabel="Aceptable"
+                    strongLabel="Seguro"
+                  />
+                  <label for="password1">Contraseña</label>
+                </p-floatlabel>
+                <div
+                  *ngIf="
+                    formFields['password1'].errors &&
+                    formFields['password1'].dirty
+                  "
+                  class="invalid-feedback"
+                >
+                  <p-message
+                    *ngIf="formFields['password1'].errors['required']"
+                    severity="error"
+                    size="small"
+                    variant="simple"
+                    class="p-error p-inline-message p-inline-message-error"
+                  >
+                    Se requiere una contraseña
+                  </p-message>
+                  <p-message
+                    *ngIf="formFields['password1'].errors['minlength']"
+                    severity="error"
+                    size="small"
+                    variant="simple"
+                    class="p-error p-inline-message p-inline-message-error"
+                  >
+                    La contraseña debe tener al menos 6 caracteres (mayúsculas,
+                    minúsculas, números y signos de puntuacion.)
+                  </p-message>
+                </div>
+              </div>
+
+              <div class="my-4">
+                <p-floatlabel variant="on">
+                  <p-password
+                    inputId="password2"
+                    formControlName="password2"
+                    [ngClass]="{
+                      'is-invalid': formFields['password1'].errors,
+                    }"
+                    [toggleMask]="true"
+                    styleClass="w-full"
+                    [fluid]="true"
+                    [feedback]="false"
+                  ></p-password>
+                  <label for="password2">Confirma tu contraseña</label>
+                </p-floatlabel>
+                <div
+                  *ngIf="
+                    formFields['password2'].errors &&
+                    formFields['password2'].dirty
+                  "
+                  class="invalid-feedback"
+                >
+                  <p-message
+                    *ngIf="formGroup.get('password2')?.hasError('required')"
+                    severity="error"
+                    size="small"
+                    variant="simple"
+                    class="p-error p-inline-message p-inline-message-error"
+                  >
+                    Se requiere una confirmación de la contraseña
+                  </p-message>
+                  <p-message
+                    *ngIf="formGroup.get('password2')?.hasError('minlength')"
+                    severity="error"
+                    size="small"
+                    variant="simple"
+                    class="p-error p-inline-message p-inline-message-error"
+                  >
+                    La confirmación de la contraseña debe tener al menos 6
+                    caracteres (mayúsculas, minúsculas, números y signos de
+                    puntuacion.)
+                  </p-message>
+                </div>
+                <p-message
+                  *ngIf="
+                    formGroup.get('password2')?.value ===
+                      formGroup.get('password1')?.value &&
+                    formGroup.get('password2')?.dirty &&
+                    formGroup.get('password1')?.dirty
+                  "
+                  icon="pi pi-check"
+                  severity="success"
+                  size="small"
+                  class="float p-error p-inline-message p-inline-message-error"
+                >
+                  Contraseña confirmada
+                </p-message>
+              </div>
 
               <p-button
-                [disabled]="formGroup.invalid"
+                [disabled]="
+                  formGroup.invalid ||
+                  formGroup.get('password2')?.value !==
+                    formGroup.get('password1')?.value
+                "
                 label="Registro"
                 styleClass="w-full my-4"
                 raised
                 type="submit"
               ></p-button>
-              @if (
-                formGroup.controls['email'].invalid &&
-                (formGroup.controls['email'].dirty ||
-                  formGroup.controls['email'].touched)
-              ) {
-                <div class="alert alert-danger">
-                  @if (
-                    formGroup.controls['email']!.getError('email') &&
-                    formGroup.valid
-                  ) {
-                    <p-message
-                      severity="error"
-                      class="p-inline-message p-inline-message-error"
-                      >Error en correo electrónico</p-message
-                    >
-                  }
-                  @if (formGroup.controls['password1'].getError('minlength')) {
-                    <span class="p-inline-message p-inline-message-error"
-                      >Must be at least 3 characters long.</span
-                    >
-                  }
-                </div>
-              }
             </form>
-            <pre
+            <!-- <pre>{{ disabled$ | async }}</pre> -->
+            <!-- <pre
               >{{ getFormValidationErrors() | async | json }}
 </pre
-            >
+            > -->
           </div>
         </div>
       </div>
@@ -176,26 +264,46 @@ import { of } from 'rxjs';
   `,
   providers: [MessageService],
 })
-export class Register {
+export class Register implements OnDestroy {
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
   formGroup: FormGroup;
-  constructor(
-    private messageService: MessageService,
-    private fb: FormBuilder,
-  ) {
-    this.formGroup = this.fb.group({
-      email: [null, [Validators.required, Validators.email]],
-      password1: [null, [Validators.required, Validators.minLength(6)]],
-      password2: [null, [Validators.required, Validators.minLength(6)]],
-    });
+  blockSpace: RegExp = /[^s]/;
+  subscription: Subscription;
+  get formFields() {
+    return this.formGroup.controls;
   }
 
+  constructor(private fb: FormBuilder) {
+    this.formGroup = this.fb.group(
+      {
+        email: [null, [Validators.required, Validators.email]],
+        password1: [null, [Validators.required, Validators.minLength(6)]],
+        password2: [null, [Validators.required, Validators.minLength(6)]],
+      },
+      { updateOn: 'blur' },
+    );
+    this.formGroup.get('password2')?.disable();
+    this.subscription = this.formGroup.controls[
+      'password1'
+    ].valueChanges.subscribe(() =>
+      this.formGroup.controls['password1'].invalid
+        ? this.formGroup.get('password2')?.disable()
+        : this.formGroup.get('password2')?.enable(),
+    );
+    // this.isDisabled = toSignal(this.disabled$);
+  }
+  ngOnDestroy(): void {
+    this.subscription.closed;
+    this.subscription.unsubscribe();
+  }
   // checked: boolean = false;
 
   registerByEmail(): void {
+    // this.submitted = true;
+
     if (this.formGroup.invalid) {
-      this.formGroup.markAllAsTouched();
+      // this.formGroup.markAllAsTouched();
       return;
     }
     let email = this.formGroup.controls['email'].value;
