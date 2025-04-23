@@ -1,9 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { Game } from '../interfaces/game.interface';
 import { GamesStore } from '../games.store';
+import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-game-card',
+  imports: [CommonModule, RouterLink],
   template: `
     <div
       class="bg-surface-0 dark:bg-surface-900 border border-gray-500 shadow-xs rounded-lg p-4 flex flex-col"
@@ -12,36 +16,26 @@ import { GamesStore } from '../games.store';
         <div>
           <p class="font-semibold text-xl">{{ game().title }}</p>
           <p class="font-normal">{{ game().author }}</p>
+          <!-- <p class="font-normal">{{ game().isFavorite }}</p> -->
         </div>
 
-        <button
-          class="bg-transparent p-2 rounded-full hover:bg-gray-100 cursor-pointer"
+        <i
+          [ngClass]="game().isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart'"
+          [ngStyle]="{ color: game().isFavorite ? 'darkred' : 'none' }"
           (click)="clickButton()"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16  "
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            [class]="game().isFavorite ? 'fill-red-400' : 'none'"
-          >
-            <path
-              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
-            />
-          </svg>
-        </button>
+        </i>
+        <i
+          [routerLink]="['/u/pages/games/', game().route]"
+          class="pi pi-play"
+          style="color: green"
+        ></i>
       </div>
     </div>
   `,
 })
 export class GameCardComponent {
   game = input.required<Game>();
-
   onFavorite = output<Game>();
 
   clickButton() {

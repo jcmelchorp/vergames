@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { GameCardComponent } from '../components/game-card.component';
+import { GameCardComponent } from './game-card.component';
 import { GamesService } from '../services/games.service';
 import { GamesStore } from '../games.store';
 

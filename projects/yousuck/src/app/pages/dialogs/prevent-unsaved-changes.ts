@@ -7,7 +7,7 @@ import {
   ConfirmDialogResult,
 } from './confirm-dialog.component';
 import { map } from 'rxjs';
-import HomeGamesComponent from '../games/home/home-games.component';
+import HomeGamesComponent from '../games/components/game-list.component';
 
 export const preventUnsavedChanges: CanDeactivateFn<
   HomeGamesComponent

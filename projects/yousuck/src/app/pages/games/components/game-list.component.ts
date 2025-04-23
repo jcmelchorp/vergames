@@ -7,13 +7,13 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { GameCardComponent } from '../components/game-card.component';
+import { GameCardComponent } from './game-card.component';
 import { GamesService } from '../services/games.service';
 import { Game } from '../interfaces/game.interface';
 import { GamesStore } from '../games.store';
 
 @Component({
-  selector: 'app-home-games',
+  selector: 'app-game-list',
   template: `
     <div class="w-full max-w-8xl mt-4 mx-auto px-4">
       <h1 class="text-2xl font-bold mb-2">Games2play</h1>
@@ -27,7 +27,6 @@ import { GamesStore } from '../games.store';
         >
           @for (game of gamesStore.games(); track game.id) {
             <app-game-card [game]="game" (onFavorite)="favoriteGame($event)" />
-            <!-- <app-game-card [game]="game" /> -->
           }
         </div>
       }
@@ -35,7 +34,7 @@ import { GamesStore } from '../games.store';
   `,
   imports: [GameCardComponent],
 })
-export default class HomeGamesComponent {
+export default class GameListComponent {
   gamesStore = inject(GamesStore);
 
   favoriteGame(game: Game) {

@@ -81,7 +81,7 @@ export const GamesStore = signalStore(
     ),
 
     addFavorite: (game: Game) => {
-      const newGames = store.games().filter((b) => b.id !== game.id);
+      const newGames = store.games(); //.filter((b) => b.id !== game.id);
 
       patchState(store, { games: newGames });
 

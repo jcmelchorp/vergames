@@ -3,11 +3,12 @@ import { Documentation } from './documentation/documentation';
 import { Crud } from './crud/crud';
 import { Empty } from './empty/empty';
 import { Games } from './games/games.component';
-import HomeGamesComponent from './games/home/home-games.component';
-import FavoritesComponent from './games/favorites/favorites.component';
+import HomeGamesComponent from './games/components/game-list.component';
+import FavoritesComponent from './games/components/favorites.component';
 import { Profile } from './profile/profile';
 import { preventUnsavedChanges } from './dialogs/prevent-unsaved-changes';
 import { AvatarComponent } from './avatar/avatar';
+import { MazeComponent } from './games/features/maze/maze.component';
 export default [
   { path: 'profile', component: Profile },
   { path: 'documentation', component: Documentation },
@@ -21,11 +22,16 @@ export default [
     children: [
       {
         path: '',
-        loadComponent: () => import('./games/home/home-games.component'),
+        loadComponent: () => import('./games/components/game-list.component'),
       },
       {
         path: 'favorites',
-        loadComponent: () => import('./games/favorites/favorites.component'),
+        loadComponent: () => import('./games/components/favorites.component'),
+      },
+      {
+        path: 'maze',
+        component: MazeComponent,
+        // loadComponent: () => import('./games/features/maze/maze.component'),
       },
     ],
   },
