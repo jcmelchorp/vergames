@@ -27,9 +27,9 @@ import { InputTextModule } from 'primeng/inputtext';
   styleUrls: ['./maze.component.scss'],
   template: ` <p-toolbar>
       <div
-        class="flex flex-col md:flex-row w-full md:w-full justify-between gap-10"
+        class="flex flex-col md:flex-row w-full md:w-full items-center justify-between gap-10"
       >
-        <div class="w-full flex flex-col items-stretch  justify-between gap-2">
+        <div class="w-full flex flex-col justify-between gap-2">
           <div class="maze-form">
             <label for="nRow">Filas</label>
             <input
@@ -44,7 +44,7 @@ import { InputTextModule } from 'primeng/inputtext';
           <p-slider [(ngModel)]="row" [min]="1" [max]="50" />
         </div>
 
-        <div class="w-full flex flex-col items-stretch justify-between gap-2">
+        <div class="w-full flex flex-col justify-between gap-2">
           <div class="maze-form">
             <label for="nCol">Columnas</label>
             <input
@@ -87,8 +87,8 @@ import { InputTextModule } from 'primeng/inputtext';
       <section class="card">
         <canvas id="maze"></canvas>
       </section>
-      <section class="p-4">
-        <div class="arrows flex flex-col items-center gap-1">
+      <section class="p-10">
+        <div class="arrows flex flex-col items-center">
           <div>
             <p-button
               severity="info"
@@ -125,7 +125,6 @@ import { InputTextModule } from 'primeng/inputtext';
             <p-button
               severity="info"
               rounded
-              class="text-5xl"
               icon="pi pi-arrow-down"
               (click)="move('Down')"
               title="move down"
