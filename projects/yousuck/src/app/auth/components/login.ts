@@ -33,15 +33,15 @@ export interface Credential {
     <div
       class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden"
     >
-      <div class="flex flex-col items-center justify-center min-w-500">
+      <div class="flex flex-col items-center justify-center">
         <div
-          style="border-radius: 26px; padding: 0.2rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 90%)"
+          style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"
         >
           <div
-            class="w-[500px] bg-surface-0 dark:bg-surface-900 py-20 px-20 sm:px-20"
-            style="border-radius: 24px"
+            class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20"
+            style="border-radius: 53px"
           >
-            <div class="text-center mb-4">
+            <div class="text-center mb-2">
               <svg
                 fill="var(--primary-color)"
                 width="50px"

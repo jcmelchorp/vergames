@@ -15,14 +15,16 @@ import { GamesStore } from '../games.store';
 @Component({
   selector: 'app-home-games',
   template: `
-    <div class="w-full max-w-4xl mt-12 mx-auto px-4">
-      <h1 class="text-2xl font-bold mb-4">Games2play</h1>
+    <div class="w-full max-w-8xl mt-4 mx-auto px-4">
+      <h1 class="text-2xl font-bold mb-2">Games2play</h1>
 
       <p>Welcome to the Ngrx Signal Games app!</p>
       @if (gamesStore.isLoading()) {
         <p>Loading...</p>
       } @else {
-        <div class="grid grid-cols-2  lg:grid-cols-3 gap-4 mt-8">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-2 mt-2"
+        >
           @for (game of gamesStore.games(); track game.id) {
             <app-game-card [game]="game" (onFavorite)="favoriteGame($event)" />
             <!-- <app-game-card [game]="game" /> -->

@@ -51,13 +51,13 @@ import { InputIconModule } from 'primeng/inputicon';
     >
       <div class="flex flex-col items-center justify-center">
         <div
-          style="border-radius: 26px; padding: 0.2rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 90%)"
+          style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)"
         >
           <div
-            class="min-w-[80%] bg-surface-0 dark:bg-surface-900 py-20 px-20 sm:px-20"
-            style="border-radius: 24px"
+            class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-30 sm:px-20"
+            style="border-radius: 53px"
           >
-            <div class="text-center mb-4">
+            <div class="text-center mb-2">
               <svg
                 fill="var(--primary-color)"
                 width="50px"
