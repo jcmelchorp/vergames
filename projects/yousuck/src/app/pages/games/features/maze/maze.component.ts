@@ -1,37 +1,159 @@
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Cell, Maze, keyboardMap } from './models';
-import { NgModel } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { Toolbar } from 'primeng/toolbar';
+import { FormsModule } from '@angular/forms';
+import { SliderModule } from 'primeng/slider';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-maze',
-  templateUrl: './maze.component.html',
-  styleUrls: ['./maze.component.css'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    Toolbar,
+    ButtonModule,
+    SliderModule,
+    InputTextModule,
+  ],
+  styleUrls: ['./maze.component.scss'],
+  template: ` <p-toolbar>
+      <div
+        class="flex flex-col md:flex-row w-full md:w-full justify-between gap-10"
+      >
+        <div class="w-full flex flex-col items-stretch  justify-between gap-2">
+          <div class="maze-form">
+            <label for="nRow">Filas</label>
+            <input
+              pInputText
+              id="nRow"
+              type="number"
+              [(ngModel)]="row"
+              min="1"
+              max="50"
+            />
+          </div>
+          <p-slider [(ngModel)]="row" [min]="1" [max]="50" />
+        </div>
+
+        <div class="w-full flex flex-col items-stretch justify-between gap-2">
+          <div class="maze-form">
+            <label for="nCol">Columnas</label>
+            <input
+              pInputText
+              id="nCol"
+              type="number"
+              [(ngModel)]="col"
+              min="1"
+              max="50"
+            />
+          </div>
+          <p-slider [(ngModel)]="col" [min]="1" [max]="50" />
+        </div>
+
+        <div class="flex flex-row justify-evenly gap-10">
+          <p-button
+            raised
+            severity="success"
+            (click)="drawMaze()"
+            [disabled]="busy"
+          >
+            Nuevo
+          </p-button>
+          <p-button outlined severity="warn" (click)="drawSolution()"
+            >Solución</p-button
+          >
+          <p-button
+            severity="info"
+            (click)="test()"
+            *ngIf="showTestButton"
+            [disabled]="busy"
+          >
+            Test
+          </p-button>
+        </div>
+      </div>
+    </p-toolbar>
+
+    <div class="flex flex-col md:flex-row items-center justify-center">
+      <section class="card">
+        <canvas id="maze"></canvas>
+      </section>
+      <section class="p-4">
+        <div class="arrows flex flex-col items-center gap-1">
+          <div>
+            <p-button
+              severity="info"
+              rounded
+              icon="pi pi-arrow-up"
+              (click)="move('Up')"
+              title="move up"
+            ></p-button>
+          </div>
+          <div>
+            <p-button
+              severity="info"
+              rounded
+              icon="pi pi-arrow-left"
+              (click)="move('Left')"
+              title="move left"
+            ></p-button>
+            <p-button
+              severity="info"
+              rounded
+              icon="pi pi-backward"
+              (click)="undo()"
+              title="undo 5 steps"
+            ></p-button>
+            <p-button
+              severity="info"
+              rounded
+              icon="pi pi-arrow-right"
+              (click)="move('Right')"
+              title="move right"
+            ></p-button>
+          </div>
+          <div>
+            <p-button
+              severity="info"
+              rounded
+              class="text-5xl"
+              icon="pi pi-arrow-down"
+              (click)="move('Down')"
+              title="move down"
+            ></p-button>
+          </div>
+        </div>
+      </section>
+    </div>`,
 })
-export class MazeComponent implements OnInit, AfterViewInit {
+export class MazeComponent implements AfterViewInit {
   row = 15;
-  col = 15;
+  col = 25;
   private maze!: Maze;
   private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
-  private readonly cellSize = 20; // length of cell edge
+  private readonly cellSize = 16; // length of cell edge
   private readonly cellEdgeThickness = 2; // thickness of cell edge
-  private readonly cellBackground = '#FFFFFF';
-  private readonly solutionPathColor = '#FF7575';
+  private readonly cellBackground = 'transparent'; //'var(--surface-card)'; // background color of cell
+  private readonly solutionPathColor = 'pink';
   private readonly myPathColor = '#4080FF';
-  private readonly myPathThickness = 10;
-  private readonly solutionPathThickness = 3;
+  private readonly myStrokeColor = 'green';
+  private readonly myPathThickness = 8;
+  private readonly solutionPathThickness = 5;
   private gameOver = false;
   private myPath: Cell[] = [];
   private currentCell!: Cell;
   showTestButton = false;
   busy = false;
-
-  constructor() {}
-
-  ngOnInit() {}
 
   ngAfterViewInit() {
     this.canvas = <HTMLCanvasElement>document.getElementById('maze');
@@ -173,6 +295,7 @@ export class MazeComponent implements OnInit, AfterViewInit {
   }
 
   private draw(cell: Cell) {
+    this.ctx.strokeStyle = this.myStrokeColor;
     this.ctx.fillRect(
       cell.col * this.cellSize,
       cell.row * this.cellSize,
