@@ -13,14 +13,14 @@ export const routes: Routes = [
         path: 'tictactoe',
         loadComponent: () =>
           import('./tictactoe/tictactoe.component').then(
-            (m) => m.TictactoeComponent
+            (m) => m.TictactoeComponent,
           ),
       },
       {
         path: 'fouronarow',
         loadComponent: () =>
           import('./fouronarow/fouronarow.component').then(
-            (m) => m.FouronarowComponent
+            (m) => m.FouronarowComponent,
           ),
       },
       {
@@ -42,28 +42,28 @@ export const routes: Routes = [
         path: 'ahorcado',
         loadComponent: () =>
           import('./ahorcado/ahorcado.component').then(
-            (m) => m.AhorcadoComponent
+            (m) => m.AhorcadoComponent,
           ),
       },
       {
         path: 'mine',
         loadComponent: () =>
           import('./buscaminas/buscaminas.component').then(
-            (m) => m.BuscaminasComponent
+            (m) => m.BuscaminasComponent,
           ),
       },
       {
         path: 'abrecaminos',
         loadComponent: () =>
           import('./abrecaminos/abrecaminos.component').then(
-            (m) => m.AbrecaminosComponent
+            (m) => m.AbrecaminosComponent,
           ),
       },
       {
         path: 'catch-the-cat',
         loadComponent: () =>
           import('./catch-the-cat/catch-the-cat.component').then(
-            (m) => m.CatchTheCatComponent
+            (m) => m.CatchTheCatComponent,
           ),
       },
       {

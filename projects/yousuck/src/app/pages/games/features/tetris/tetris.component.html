@@ -1,0 +1,22 @@
+<div class="game-container">
+  <h1 class="display-4">Tetris</h1>
+  <!-- <p class="mat-h1">You know what to do...</p> -->
+  <button mat-fab extended color="primary" type="button" (click)="startGame();disableButton=!disableButton"
+    [disabled]="disableButton">
+    <mat-icon>play_arrow</mat-icon>
+    <span>Inicio</span>
+  </button>
+  <!-- <button mat-raised-button color="primary" type="button" (click)="startGame()">Inicio</button> -->
+  <!-- <button mat-raised-button color=" accent">Instructions</button> -->
+  <!-- @if (disableButton) { -->
+  <!-- @if (disableButton) { -->
+  <div class="row" [ngStyle]="{'display': disableButton ? 'block' : 'none'}">
+    <!-- <div class="row"> -->
+    <app-tetris-glass></app-tetris-glass>
+    <div class="sidebar">
+      <app-tetris-next></app-tetris-next>
+      <app-tetris-status></app-tetris-status>
+    </div>
+  </div>
+  <!-- } -->
+</div>
