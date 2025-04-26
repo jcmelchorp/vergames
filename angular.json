@@ -121,6 +121,9 @@
             "outputPath": "dist/yousuck",
             "index": "projects/yousuck/src/index.html",
             "browser": "projects/yousuck/src/main.ts",
+            "allowedCommonJsDependencies": [
+              "lodash"
+            ],
             "polyfills": [
               "zone.js"
             ],
@@ -135,7 +138,11 @@
             "styles": [
               "projects/yousuck/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "projects/yousuck/public/piano-play/lib/verovio-toolkit.js",
+              "projects/yousuck/public/drum-machine/snap.js",
+              "projects/yousuck/public/catch-the-cat/phaser.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -143,7 +150,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "5MB"
+                  "maximumError": "8MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -201,7 +208,11 @@
             "styles": [
               "projects/yousuck/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "projects/yousuck/public/piano-play/lib/verovio-toolkit.js",
+              "projects/yousuck/public/drum-machine/snap.js",
+              "projects/yousuck/public/catch-the-cat/phaser.min.js"
+            ]
           }
         },
         "deploy": {

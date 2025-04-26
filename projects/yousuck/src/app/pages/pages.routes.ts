@@ -18,6 +18,8 @@ import { CatchTheCatComponent } from './games/features/catch-the-cat/catch-the-c
 import { AhorcadoComponent } from './games/features/ahorcado/ahorcado.component';
 import { BuscaminasComponent } from './games/features/buscaminas/buscaminas.component';
 import { TargetComponent } from './games/features/target/target.component';
+import { PianoPlayComponent } from './games/features/piano-play/piano-play.component';
+import { DrumMachineComponent } from './games/features/drum-machine/drum-machine.component';
 export default [
   { path: 'profile', component: Profile },
   { path: 'documentation', component: Documentation },
@@ -77,6 +79,14 @@ export default [
       {
         path: 'target',
         component: TargetComponent,
+      },
+      {
+        path: 'piano',
+        component: PianoPlayComponent,
+      },
+      {
+        path: 'drum-machine',
+        component: DrumMachineComponent,
       },
     ],
   },

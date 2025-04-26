@@ -1,0 +1,18 @@
+
+  <div class="note-card" *ngIf="currentNote" (click)="playNote(currentNote)">
+    <span class="name">{{currentNote.fullname}}</span>
+    <span class="octave">OCTAVE {{currentNote.octave}}</span>
+  </div>
+  <div class="note-card-or" *ngIf="alternateNote">
+    <span> OR </span>
+  </div>
+  <div class="note-card" *ngIf="alternateNote" (click)="playNote(alternateNote)">
+    <span class="name">{{alternateNote.fullname}}</span>
+    <span class="octave">OCTAVE {{alternateNote.octave}}</span>
+  </div>
+  <div *ngIf="!currentNote">
+    <div class="row">
+      <span>Presione una tecla en el <b>piano</b> de <i>abajo</i> y vea la nota aparecer en la <b>partitura de piano</b> a la <i>derecha</i>.
+      </span>
+    </div>
+  </div>

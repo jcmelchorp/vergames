@@ -28,10 +28,9 @@ interface MenuChangeEvent {
 export class LayoutService {
   isDarkInLocal = localStorage.getItem('yousuck-dark') === 'true';
   primaryLocal = localStorage.getItem('yousuck-primary') || 'emerald';
-  surfaceLocal = localStorage.getItem('yousuck-surface');
-  presetsLocal = localStorage.getItem('yousuck-presets') || 'MAterial';
+  surfaceLocal = localStorage.getItem('yousuck-surface') || 'blue';
+  presetsLocal = localStorage.getItem('yousuck-presets') || 'Material';
   menuModeLocal = localStorage.getItem('yousuck-menu-mode') || 'static';
-
   _config: layoutConfig = {
     preset: this.presetsLocal,
     primary: this.primaryLocal,

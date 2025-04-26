@@ -1,0 +1,7 @@
+{
+    "globalDependencies": {
+        "snapsvg": "github:DefinitelyTyped/DefinitelyTyped/snapsvg/snapsvg.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd",
+        "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#7de6c3dd94feaeb21f20054b9f30d5d"
+    }
+  
+}

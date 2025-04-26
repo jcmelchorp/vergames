@@ -27,12 +27,16 @@
     "@ngrx/operators": "^19.1.0",
     "@ngrx/signals": "^19.1.0",
     "@primeng/themes": "^19.0.5",
+    "@types/d3-selection": "3.0.11",
+    "@types/snapsvg": "^0.5.8",
     "chart.js": "^4.4.9",
+    "d3": "^3.5.17",
     "postcss": "8.5.1",
     "primeclt": "^0.1.5",
     "primeicons": "^7.0.0",
     "primeng": "^19.0.8",
     "rxjs": "~7.8.2",
+    "snapsvg": "^0.4.0",
     "tailwindcss-primeui": "^0.5.1",
     "tslib": "^2.8.1",
     "zone.js": "~0.15.0"
@@ -42,6 +46,7 @@
     "@angular/cli": "^19.2.8",
     "@angular/compiler-cli": "^19.2.7",
     "@types/jasmine": "~5.1.7",
+    "@types/node": "^22.15.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^9.1.0",
@@ -57,6 +62,8 @@
     "postcss": "^8.4.49",
     "prettier": "^3.5.3",
     "tailwindcss": "^3.4.17",
+    "worker-loader": "^3.0.0",
+    "imports-loader": "^3.0.0",
     "typescript": "~5.7.3"
   }
 }

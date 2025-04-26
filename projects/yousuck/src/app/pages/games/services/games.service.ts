@@ -92,6 +92,24 @@ const games: Game[] = [
       'A target game where you can shoot the target by clicking on it.',
     sourceUrl: '',
   },
+  {
+    id: 11,
+    route: 'piano',
+    title: 'Piano Play',
+    author: 'Dean Malone',
+    description:
+      'My family were recently given a beautiful old Ed Seiler piano. It was built in the early 1900s and is in great condition with a rich and vibrant sound. To improve my rusty piano skills, I thought it would be fun to build a piano web app to (re)learn the basics of piano notation',
+    sourceUrl: 'https://deanmalone.net/post/piano-play/',
+  },
+  {
+    id: 12,
+    route: 'drum-machine',
+    title: 'Drum Machine',
+    author: 'unknown',
+    description: 'A Rhythm Sequencer Made with Angular 2 and TypeScript',
+    sourceUrl:
+      'https://github.com/JosephFarina/portfolio/tree/master/app/projects/drum-machine',
+  },
 ];
 
 @Injectable({ providedIn: 'root' })
