@@ -20,6 +20,7 @@ import { BuscaminasComponent } from './games/features/buscaminas/buscaminas.comp
 import { TargetComponent } from './games/features/target/target.component';
 import { PianoPlayComponent } from './games/features/piano-play/piano-play.component';
 import { DrumMachineComponent } from './games/features/drum-machine/drum-machine.component';
+import { ConHectorComponent } from './games/features/con-hector/con-hector.component';
 export default [
   { path: 'profile', component: Profile },
   { path: 'documentation', component: Documentation },
@@ -87,6 +88,10 @@ export default [
       {
         path: 'drum-machine',
         component: DrumMachineComponent,
+      },
+      {
+        path: 'con-hector',
+        component: ConHectorComponent,
       },
     ],
   },

@@ -1,33 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 
 // Declare ScriptLoader as a global variable so that it can be used in this TypeScript file
 declare global {
   interface Window {
-    ScriptLoader: {
-      typesetPromise: () => void;
-      startup: {
-        promise: Promise<any>;
-      };
-    };
+    ScriptLoader: {scriptLoaderLoaded: Promise<void>};
   }
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+
 export class ScriptLoaderService {
   
   // A variable to check if ScriptLoader was successfully loaded
-  private scriptLoaderLoaded: Promise<void>;
+   scriptLoaderLoaded: Promise<void>;
   
-  // Configure which ScriptLoader version we want
-  private scriptLoader: any = {
-    source: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js',
-  }
 
-  constructor() {
+
+  constructor(@Inject('CDN_JAVASCRIPT_URL') scriptUrl: string) {
     // TODO isn't this a kind of duplicate for later code?
-    this.scriptLoaderLoaded = this.loadScriptLoader()
+    this.scriptLoaderLoaded = this.loadScriptLoader(scriptUrl)
       .then(() => {
         console.log('ScriptLoader loaded');
       })
@@ -42,13 +32,13 @@ export class ScriptLoaderService {
     return this.scriptLoaderLoaded;
   }
 
-  private async loadScriptLoader(): Promise<any> {
+  private async loadScriptLoader(source:string): Promise<any> {
     return new Promise((resolve, reject) => {
       console.log('loading ScriptLoader');
       
       const script: HTMLScriptElement = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = this.scriptLoader.source;
+      script.src = source;
       script.async = true;
 
       // Once the script is loaded, resolve the promise
@@ -69,11 +59,10 @@ export class ScriptLoaderService {
     /*
     * This method is used to render the math inside an element
      */
-    window.ScriptLoader.startup.promise.then(() => {
+    window.ScriptLoader.scriptLoaderLoaded.then(() => {
 
-      console.log('Typesetting LaTex');
+      console.log('Typesetting success');
 
-      window.ScriptLoader.typesetPromise();
     });
   }
 }
