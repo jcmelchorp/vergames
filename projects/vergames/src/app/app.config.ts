@@ -24,6 +24,7 @@ import { environment } from '../environments/environment';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
+    provideAnimationsAsync(),
     provideRouter(routes, withInMemoryScrolling()),
     provideFirebaseApp(() => initializeApp(environment.firebaseOptions)),
     provideAuth(() => {

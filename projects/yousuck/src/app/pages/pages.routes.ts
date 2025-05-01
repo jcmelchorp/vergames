@@ -21,6 +21,7 @@ import { TargetComponent } from './games/features/target/target.component';
 import { PianoPlayComponent } from './games/features/piano-play/piano-play.component';
 import { DrumMachineComponent } from './games/features/drum-machine/drum-machine.component';
 import { ConHectorComponent } from './games/features/con-hector/con-hector.component';
+import { ElCaminoComponent } from './games/features/el-camino/el-camino.component';
 export default [
   { path: 'profile', component: Profile },
   { path: 'documentation', component: Documentation },
@@ -92,6 +93,10 @@ export default [
       {
         path: 'con-hector',
         component: ConHectorComponent,
+      },
+      {
+        path: 'el-camino',
+        component: ElCaminoComponent,
       },
     ],
   },

@@ -3,6 +3,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GameBoardComponent } from './snake/game-board/game-board.component';
 import { QuizComponent } from './quiz/quiz.component';
+import { ElCaminoComponent } from './el-camino/el-camino.component';
 export const routes: Routes = [
   {
     path: '',
@@ -78,6 +79,10 @@ export const routes: Routes = [
       {
         path: 'quiz',
         component: QuizComponent,
+      },
+      {
+        path: 'el-camino',
+        component: ElCaminoComponent,
       },
     ],
   },
