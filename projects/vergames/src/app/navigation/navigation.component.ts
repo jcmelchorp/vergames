@@ -45,6 +45,10 @@ export class NavigationComponent {
 
   menus: any[] = [
     {
+      route: 'el-camino',
+      title: 'El Camino',
+    },
+    {
       route: 'quiz',
       title: 'Quiz',
     },

@@ -1,20 +1,19 @@
-// @use "./styles/tokens.scss";
 @use "@angular/material" as mat;
-@use "./styles/_theme-colors.scss" as theme-colors;
 
-html {
-  @include mat.theme(
-    (
-      color: (
-        theme-type: light,
-        primary: theme-colors.$primary-palette,
-        tertiary: theme-colors.$tertiary-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
+
+.elevation-card {
+  @include mat.elevation-transition();
+  @include mat.elevation(2);
+
+  &:hover {
+    @include mat.elevation(8);
+  }
 }
+
+
+$enable-negative-margins: true;
+$enable-negative-padding: true;
+
 
 html,
 body {
@@ -68,3 +67,22 @@ body {
   border: 0.25vmin solid black;
   transition: all 0.3ms ease-in;
 }
+
+/* class to avoid text selection*/
+.no-copy {
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
+}
+
+.elevation-card {
+  @include mat.elevation-transition();
+  @include mat.elevation(2);
+
+  &:hover {
+    @include mat.elevation(8);
+  }
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

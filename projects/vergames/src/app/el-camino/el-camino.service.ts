@@ -69,6 +69,7 @@ export class ElCaminoService {
         levels.map((level) => {
           let blocks = level.blocks.map((tile) => {
             let iniRot=Math.floor(Math.random()*4)*90;
+            if (iniRot==tile.rot) iniRot=(tile.rot+180) % 360;
             return {
               index: tile.index,
               type: tile.type,

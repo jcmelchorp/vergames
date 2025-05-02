@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   inject,
@@ -15,10 +16,11 @@ import {
 } from '@angular/animations';
 import { ElCaminoService } from './el-camino.service';
 import { LevelTiles, TileExtended, TileType } from './el-camino.model';
-import { map, Observable, Subject, Subscription, switchMap, tap } from 'rxjs';
+import { map, Subject, Subscription, tap } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ButtonModule } from 'primeng/button';
-import { IconFieldModule } from 'primeng/iconfield';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-el-camino',
@@ -26,54 +28,31 @@ import { IconFieldModule } from 'primeng/iconfield';
     CommonModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    ButtonModule,
+    MatButtonModule,
+    NgxSpinnerModule,
+    MatIconModule
   ],
   template: `
-    <!-- <ng-container mat-grid-list  #level01 class="mat-grid-list" cols="{{ level }}" rowHeight="1:1"></ng-container> -->
-    <!-- <div *ngIf="levels() as levels;"  > -->
-    <div
-      style="display: flex; flex-direction: column; justify-content: center;align-items:center"
-    >
-      <h1 class="font-bold text-3xl">El camino</h1>
-      <p class="font-semibold text-lg">Complete paths</p>
-      <p *ngIf="isLevelDone$ | async">Win!</p>
-      <p-button
-        raised
-        size="large"
-        label="Inicio"
-        icon="pi pi-play"
-        type="button"
-        (click)="nextLevel()"
-      />
-    </div>
-    <div
-      *ngIf="level$ | async as level"
-      style="display: flex; flex-direction: column; justify-content: center; align-items:center"
-    >
-      <mat-grid-list
-        class="mat-grid-list"
-        style="width: 50%; height:auto;"
-        cols="{{ level.cols }}"
-      >
+  <div style="display: flex; flex-direction: column; justify-content: start;align-items:center">
+    <h1 class="font-bold text-3xl">El camino</h1>
+    <button [disabled]="disableButton" mat-raised-button type="button" (click)="nextLevel();toggleFullscreen()">Inicio</button>
+    <div *ngIf="level$ | async as level" style="width: 85%;max-width:500px; max-height:500px;padding-bottom:0;height:auto;">
+      <ngx-spinner bdColor="#fff" size="large" color="#000" type="pacman" [fullScreen]="true"><p style="color:black;font-size:80px"  *ngIf="!(isLevelDone$|async)"> Level:{{level.level}}</p></ngx-spinner>
+      <mat-grid-list class="mat-grid-list"  cols="{{ level.cols }}">
         <ng-container #container *ngFor="let tile of level.blocks; index as i">
-          <mat-grid-tile
-            class="mat-grid-tile"
-            (click)="rotate(level, tile)"
-            [@rotateState]="tile.currentRotation"
-            [ngStyle]="{
+          <mat-grid-tile class="mat-grid-tile" (click)="rotate(level, tile)" [@rotateState]="tile.currentRotation" 
+          [ngStyle]="{
               filter: 'invert(100%)',
               background: 'center / cover no-repeat url(' + tile.image + ')',
-              border: tile.success ? '2px dashed #550055' : 'none',
-            }"
-          >
+              border: tile.success ? 'none//2px dashed #550055' : 'none',
+            }">
             <div><span></span></div>
           </mat-grid-tile>
         </ng-container>
       </mat-grid-list>
     </div>
-    <!-- </div> -->
+  </div>
   `,
-  styleUrl: './el-camino.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('rotateState', [
@@ -81,12 +60,13 @@ import { IconFieldModule } from 'primeng/iconfield';
       state('90', style({ transform: 'rotate(90deg)' })),
       state('180', style({ transform: 'rotate(180deg)' })),
       state('270', style({ transform: 'rotate(270deg)' })),
-      transition('* => *', animate('200ms ease-in-out')),
+      transition('* => *', animate('50ms ease-in-out')),
     ]),
+ 
   ],
-  providers: [ElCaminoService],
+  providers: [ElCaminoService,NgxSpinnerService],
 })
-export class ElCaminoComponent implements OnInit {
+export class ElCaminoComponent implements OnInit,AfterViewInit {
   levelCount: number = 1;
   currentLevel: Subject<number> = new Subject();
   currentLevel$ = this.currentLevel.asObservable();
@@ -98,21 +78,30 @@ export class ElCaminoComponent implements OnInit {
   isLevelDone: Subject<boolean> = new Subject();
   isLevelDone$ = this.isLevelDone.asObservable();
   subscription!: Subscription;
-  constructor() {}
+  element: HTMLBodyElement | null = null;
+
+  constructor(private spinner: NgxSpinnerService) {}
+  
+  ngAfterViewInit(): void {
+    this.element = document.querySelector('body');
+
+  }
 
   ngOnInit(): void {
+
     this.level$ = this.currentLevel$.pipe(
       map((num: number) => this.levels![num - 1]),
       tap((level) => {
+        this.disableButton = true;
+        this.isLevelDone.next(false);
         this.level.next(level);
         console.log(level);
       }),
     );
+
   }
 
   nextLevel() {
-    this.isLevelDone.next(false);
-    this.disableButton = true;
     this.currentLevel.next(this.levelCount++);
   }
 
@@ -133,7 +122,7 @@ export class ElCaminoComponent implements OnInit {
     console.log(tile.currentRotation);
     if (tile.currentRotation === tile.correctRotation) {
       tile.success = true;
-      console.log(`Tile No. ${tile.index} success`);
+      // console.log(`Tile No. ${tile.index} success`);
     } else {
       tile.success = false;
     }
@@ -162,16 +151,63 @@ export class ElCaminoComponent implements OnInit {
       }),
       tap((stop) => {
         if (stop) {
-          console.log('Done');
+          // console.log('Done');
+          this.showSpinner()
           setTimeout(() => {
             this.currentLevel.next(this.levelCount++);
-            this.isLevelDone.next(true);
-          }, 1000);
+          }, 500);
         } else {
-          console.log('Not yet');
-          this.isLevelDone.next(false);
+          // console.log('Not yet');
         }
       }),
     );
+  }
+
+  showSpinner() {
+    this.spinner.show();
+    setTimeout(() => {
+        /** spinner ends after 5 seconds */
+        this.spinner.hide();
+    }, 1500);
+  }
+
+  enterFullscreen(element: HTMLElement): Promise<void> {
+    if (element.requestFullscreen) {
+        return element.requestFullscreen();
+    } else if ((element as any).webkitRequestFullscreen) {
+        return (element as any).webkitRequestFullscreen();
+    } else if ((element as any).mozRequestFullScreen) {
+        return (element as any).mozRequestFullScreen();
+    } else if ((element as any).msRequestFullscreen) {
+        return (element as any).msRequestFullscreen();
+    } else {
+        return Promise.reject(new Error('Fullscreen API is not supported.'));
+    }
+}
+  exitFullscreen(): Promise<void> {
+      if (document.exitFullscreen) {
+          return document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+          return (document as any).webkitExitFullscreen();
+      } else if ((document as any).mozCancelFullScreen) {
+          return (document as any).mozCancelFullScreen();
+      } else if ((document as any).msExitFullscreen) {
+          return (document as any).msExitFullscreen();
+      } else {
+          return Promise.reject(new Error('Fullscreen API is not supported.'));
+      }
+  }
+  toggleFullscreen() {
+    if (this.element) {
+      if (!document.fullscreenElement) {
+        this.enterFullscreen(this.element)
+          .then(() => console.log('Fullscreen on'))
+          .catch((error) => console.error('Error toggling fullscreen:', error));
+      } else {
+        this.exitFullscreen()
+        .then(() => console.log('Fullscreen off'))
+        .catch((error) => console.error('Error toggling fullscreen:', error));
+      }
+    }
   }
 }

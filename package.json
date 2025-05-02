@@ -32,6 +32,7 @@
     "@types/snapsvg": "^0.5.8",
     "chart.js": "^4.4.9",
     "d3": "^3.5.17",
+    "ngx-spinner": "^19.0.0",
     "postcss": "8.5.1",
     "primeclt": "^0.1.5",
     "primeicons": "^7.0.0",
