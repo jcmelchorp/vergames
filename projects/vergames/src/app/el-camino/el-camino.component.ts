@@ -1,73 +1,58 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
-  contentChild,
-  ElementRef,
   inject,
-  Input,
-  numberAttribute,
   OnInit,
-  TemplateRef,
-  viewChild,
-  ViewChild,
-  ViewChildren,
-  viewChildren,
-  ViewContainerRef,
-  ViewRef,
 } from '@angular/core';
-import {
-  MatGridList,
-  MatGridListModule,
-  MatGridTile,
-} from '@angular/material/grid-list';
-import { NgElement, WithProperties } from '@angular/elements';
-import { NTileComponent } from './n-tile.component';
-import { CommonModule, NgFor, NgStyle } from '@angular/common';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { CommonModule } from '@angular/common';
 import {
   animate,
-  query,
   state,
   style,
   transition,
   trigger,
 } from '@angular/animations';
+import { ElCaminoService } from './el-camino.service';
+import { LevelTiles, TileExtended, TileType } from './el-camino.model';
+import { map, Subject, switchMap, tap } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'n-tile': NgElement & WithProperties<{ image: string }>;
-  }
-}
-
-const rotateTransformation = [
-  style({ transform: 'rotate(0)' }),
-  animate('1s', style({ transform: 'rotate(90deg)' })),
-];
 @Component({
   selector: 'app-el-camino',
-  imports: [NgStyle, NgFor, MatGridListModule],
+  imports: [CommonModule, MatGridListModule, MatProgressSpinnerModule],
   template: `
     <!-- <ng-container mat-grid-list  #level01 class="mat-grid-list" cols="{{ level }}" rowHeight="1:1"></ng-container> -->
-    <div style="display: flex; justify-content: center; ">
-      <mat-grid-list style="width: 50%; height:auto;" cols="3">
-        <ng-container #container *ngFor="let tile of tiles">
-          <mat-grid-tile
-            class="matGridTile"
-            (click)="rotate(tile)"
-            [@rotateState]="tile.currentRotation.toString()"
-            [ngStyle]="{
-              filter: 'invert(100%)',
-              background: 'center / cover no-repeat url(' + tile.image + ')',
-              border:tile.success?'1px solid darkgreen':'none'
-            }"
-          >
-            <div><span></span></div>
-          </mat-grid-tile>
-        </ng-container>
-      </mat-grid-list>
-    </div>
+    <!-- <div *ngIf="levels() as levels;"  > -->
+      <button (click)="nextLevel()">Next Level</button>
 
-    <button (click)="createElements()">Create Elements</button>
+      <div *ngIf="level$ | async as level" style="display: flex; flex-direction: column; justify-content: center; align-items: center; ">
+        <h2>Level: {{ level.level }}</h2>
+
+        <mat-grid-list
+          class="mat-grid-list"
+          style="width: 50%; height:auto;"
+          cols="{{level.cols}}"
+        >
+          <ng-container
+            #container
+            *ngFor="let tile of level.blocks; index as i"
+          >
+            <mat-grid-tile
+              class="mat-grid-tile"
+              (click)="rotate(level.level, tile)"
+              [@rotateState]="tile.currentRotation"
+              [ngStyle]="{
+                filter: 'invert(100%)',
+                background: 'center / cover no-repeat url(' + tile.image + ')',
+                border: tile.success ? '2px dashed #550055' : 'none',
+              }"
+            >
+              <div><span></span></div>
+            </mat-grid-tile>
+          </ng-container>
+        </mat-grid-list>
+   </div>  <!-- </div> -->
   `,
   styleUrl: './el-camino.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,123 +65,61 @@ const rotateTransformation = [
       transition('* => *', animate('200ms ease-in-out')),
     ]),
   ],
+  providers: [ElCaminoService],
 })
 export class ElCaminoComponent implements OnInit {
-  @Input({ alias: 'levelNum', transform: numberAttribute, required: true })
-  level: number = 3;
-  vch = contentChild('container', { read: ViewContainerRef });
-  gridList = viewChild('gridList', { read: MatGridList });
-  #componentRef?: ComponentRef<MatGridTile>;
-  constructor() {}
-  ngOnInit(): void {}
-  tiles: {
-    index: number;
-    type: string;
-    image: string;
-    currentRotation: number;
-    correctRotation: number;
-    success: boolean;
-  }[] = [
-    {
-      type: 'c',
-      image: '/el-camino/curve.png',
-      index: 1,
-      currentRotation: 0,
-      correctRotation: 90,
-      success: false,
-    },
-    {
-      type: 's',
-      image: '/el-camino/straight.png',
-      index: 2,
-      currentRotation: 0,
-      correctRotation: 90,
-      success: false,
-    },
-    {
-      type: 'c',
-      image: '/el-camino/curve.png',
-      index: 3,
-      currentRotation: 0,
-      correctRotation: 180,
-      success: false,
-    },
-    {
-      type: 'c',
-      image: '/el-camino/curve.png',
-      index: 4,
-      currentRotation: 270,
-      correctRotation: 0,
-      success: false,
-    },
-    {
-      type: 'e',
-      image: '/el-camino/end.png',
-      index: 5,
-      currentRotation: 0,
-      correctRotation: 90,
-      success: false,
-    },
-    {
-      type: 's',
-      image: '/el-camino/straight.png',
-      index: 6,
-      currentRotation: 90,
-      correctRotation: 0,
-      success: false,
-    },
-    {
-      type: 'b',
-      image: '/el-camino/blank.png',
-      index: 7,
-      currentRotation: 180,
-      correctRotation: 0,
-      success: false,
-    },
-    {
-      type: 'b',
-      image: '/el-camino/blank.png',
-      index: 8,
-      currentRotation: 90,
-      correctRotation: 0,
-      success: false,
-    },
-    {
-      type: 'e',
-      image: '/el-camino/end.png',
-      index: 9,
-      currentRotation: 0,
-      correctRotation: 180,
-      success: false,
-    },
-  ];
+  levelCount:number=1;
+  currentLevel :Subject<number>= new Subject();
+  currentLevel$ = this.currentLevel.asObservable();
+  _elCaminoService = inject(ElCaminoService);
+  levels = this._elCaminoService.levels();
+  level: Subject<LevelTiles> = new Subject();
+  level$ = this.level.asObservable();
+disableButton:boolean=false;
 
-  createElements() {
-    this.vch()?.clear;
-    // for (let i = 1; i <= this.level * this.level; i++) {
-    let image = '/el-camino/curve.png';
-    this.#componentRef = this.vch()?.createComponent(MatGridTile);
-    this.#componentRef?.instance._setStyle('background', `url(${image})`);
-    // }
+  constructor() {
+   
   }
-  rotate(tile: any) {
-    console.log(this.tiles[tile.index - 1].currentRotation);
-    if (
-      this.tiles[tile.index - 1].currentRotation ==
-      this.tiles[tile.index - 1].correctRotation
-    ) {
-      this.tiles[tile.index - 1].success = true;
-      console.log(`index ${this.tiles[tile.index - 1].index} success`);
-    } else {
-      this.tiles[tile.index - 1].success = false;
+
+  ngOnInit(): void {
+
+   this.level$= this.currentLevel$.pipe(
+      map((num:number)=> this.levels![num-1]  ),
+      tap(level=>this.level.next(level))
+    );
+    
+  }
+
+  nextLevel() {
+    this.currentLevel.next(this.levelCount++); 
+  }
+
+  rotate(levelNum: number, tile: TileExtended) {
+    switch (tile.type) {
+      case TileType.S:
+        tile.currentRotation = (tile.currentRotation! + 90) % 180;
+        break;
+      case TileType.B:
+        tile.currentRotation = 0;
+        break;
+      default:
+        tile.currentRotation = (tile.currentRotation! + 90) % 360;
+        break;
     }
 
-    this.tiles[tile.index - 1].currentRotation =
-      (tile.currentRotation + 90) % 360;
-    // console.log(this.tiles.map(t=>{return {t.indext.currentRotation}}))
-    // tile.currentRotation = (tile.currentRotation + 90) % 360;
+    console.log(tile.currentRotation);
+    if (tile.currentRotation === tile.correctRotation) {
+      tile.success = true;
+      console.log(`Tile No. ${tile.index} success`);
+    } else {
+      tile.success = false;
+    }
+    // var level = this.levels!.find((level) => level.level == levelNum);
+
+    // this.level.next({
+    //   id: level!.id,
+    //   level: level!.level,
+    //   blocks: level!.blocks,
+    // });
   }
-  // get rotationState(): string {
-  //     return this.currentRotation.toString();
-  // }
 }
