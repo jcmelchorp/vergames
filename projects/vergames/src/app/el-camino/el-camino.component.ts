@@ -85,7 +85,7 @@ export class ElCaminoComponent implements OnInit {
   ngOnInit(): void {
     this.level$ = this.currentLevel$.pipe(
       map((num: number) => this.levels![num - 1]),
-      tap((level) => {this.level.next(level);console.log(level)}),
+      tap((level) => {this.level.next(level)}),
     );
    
   }
@@ -112,7 +112,7 @@ export class ElCaminoComponent implements OnInit {
     // console.log(tile.currentRotation);
     if (tile.currentRotation === tile.correctRotation) {
       tile.success = true;
-      console.log(`Tile No. ${tile.index} success`);
+      // console.log(`Tile No. ${tile.index} success`);
     } else {
       tile.success = false;
     }
@@ -131,6 +131,7 @@ export class ElCaminoComponent implements OnInit {
       level: level.level,
       blocks: blocks,
     } as LevelTiles);
+    
     this.isLevelDone$ = this.level.pipe(
       map((level) => {
         return !level.blocks
@@ -141,15 +142,17 @@ export class ElCaminoComponent implements OnInit {
       }),
       tap((stop) => {
         if (stop) {
-          this.currentLevel.next(this.levelCount++);
-          this.isLevelDone.next(true)
-          console.log('Done')
+          // console.log('Done')
+          setTimeout(() => {
+            this.currentLevel.next(this.levelCount++);
+            this.isLevelDone.next(true)
+                    }, 2000);
+          
         } else {
+          // console.log('Not yet')
           this.isLevelDone.next(false)
-          console.log('Not yet')
-
         }
         }
-    )).pipe(tap((result)=>console.log(result)))
+    ));
   }
 }

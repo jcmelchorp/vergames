@@ -68,13 +68,14 @@ export class ElCaminoService {
       map((levels) =>
         levels.map((level) => {
           let blocks = level.blocks.map((tile) => {
+            let iniRot=Math.floor(Math.random()*4)*90;
             return {
               index: tile.index,
               type: tile.type,
               image: tileImageFromType(tile.type),
-              currentRotation: 0,
+              currentRotation: iniRot,
               correctRotation: tile.rot,
-              success: 0 - tile.rot == 0 ? true : false,
+              success: tile.type == TileType.B ? true : iniRot - tile.rot == 0 ? true : false,
             } as TileExtended;
           });
           return {
