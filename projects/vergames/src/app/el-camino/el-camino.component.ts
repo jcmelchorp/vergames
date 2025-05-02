@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  isDevMode,
   OnInit,
 } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -30,7 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressSpinnerModule,
     MatButtonModule,
     NgxSpinnerModule,
-    MatIconModule
+    MatIconModule,
   ],
   template: `
   <div style="display: flex; flex-direction: column; justify-content: start;align-items:center">
@@ -44,7 +45,7 @@ import { MatIconModule } from '@angular/material/icon';
           [ngStyle]="{
               filter: 'invert(100%)',
               background: 'center / cover no-repeat url(' + tile.image + ')',
-              border: tile.success ? 'none//2px dashed #550055' : 'none',
+              border: (tile.success && devMode) ? '2px dashed #550055' : 'none',
             }">
             <div><span></span></div>
           </mat-grid-tile>
@@ -79,6 +80,7 @@ export class ElCaminoComponent implements OnInit,AfterViewInit {
   isLevelDone$ = this.isLevelDone.asObservable();
   subscription!: Subscription;
   element: HTMLBodyElement | null = null;
+devMode:boolean=isDevMode();
 
   constructor(private spinner: NgxSpinnerService) {}
   
