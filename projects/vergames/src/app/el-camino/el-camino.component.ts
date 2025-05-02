@@ -17,21 +17,39 @@ import { ElCaminoService } from './el-camino.service';
 import { LevelTiles, TileExtended, TileType } from './el-camino.model';
 import { map, Observable, Subject, Subscription, switchMap, tap } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ButtonModule } from 'primeng/button';
+import { IconFieldModule } from 'primeng/iconfield';
 
 @Component({
   selector: 'app-el-camino',
-  imports: [CommonModule, MatGridListModule, MatProgressSpinnerModule],
+  imports: [
+    CommonModule,
+    MatGridListModule,
+    MatProgressSpinnerModule,
+    ButtonModule,
+  ],
   template: `
     <!-- <ng-container mat-grid-list  #level01 class="mat-grid-list" cols="{{ level }}" rowHeight="1:1"></ng-container> -->
     <!-- <div *ngIf="levels() as levels;"  > -->
-    <button (click)="nextLevel()">Next Level</button>
-
+    <div
+      style="display: flex; flex-direction: column; justify-content: center;align-items:center"
+    >
+      <h1 class="font-bold text-3xl">El camino</h1>
+      <p class="font-semibold text-lg">Complete paths</p>
+      <p *ngIf="isLevelDone$ | async">Win!</p>
+      <p-button
+        raised
+        size="large"
+        label="Inicio"
+        icon="pi pi-play"
+        type="button"
+        (click)="nextLevel()"
+      />
+    </div>
     <div
       *ngIf="level$ | async as level"
-      style="display: flex; flex-direction: column; justify-content: center; align-items: center; "
+      style="display: flex; flex-direction: column; justify-content: center; align-items:center"
     >
-      <h2>Level: {{ level.level }}</h2>
-<h1 *ngIf="isLevelDone$|async" style="color:darkgreen"></h1>
       <mat-grid-list
         class="mat-grid-list"
         style="width: 50%; height:auto;"
@@ -85,17 +103,20 @@ export class ElCaminoComponent implements OnInit {
   ngOnInit(): void {
     this.level$ = this.currentLevel$.pipe(
       map((num: number) => this.levels![num - 1]),
-      tap((level) => {this.level.next(level)}),
+      tap((level) => {
+        this.level.next(level);
+        console.log(level);
+      }),
     );
-   
   }
 
   nextLevel() {
-    this.isLevelDone.next(false); 
+    this.isLevelDone.next(false);
+    this.disableButton = true;
     this.currentLevel.next(this.levelCount++);
   }
 
-  rotate(level:LevelTiles, tile: TileExtended) {
+  rotate(level: LevelTiles, tile: TileExtended) {
     switch (tile.type) {
       case TileType.S:
         tile.currentRotation = (tile.currentRotation! + 90) % 180;
@@ -109,15 +130,15 @@ export class ElCaminoComponent implements OnInit {
         break;
     }
 
-    // console.log(tile.currentRotation);
+    console.log(tile.currentRotation);
     if (tile.currentRotation === tile.correctRotation) {
       tile.success = true;
-      // console.log(`Tile No. ${tile.index} success`);
+      console.log(`Tile No. ${tile.index} success`);
     } else {
       tile.success = false;
     }
 
-   let blocks = level.blocks.map((block) => {
+    let blocks = level.blocks.map((block) => {
       if (block.index === tile.index) {
         return tile;
       } else {
@@ -125,13 +146,12 @@ export class ElCaminoComponent implements OnInit {
       }
     });
 
-   
     this.level.next({
       id: level.id,
       level: level.level,
       blocks: blocks,
     } as LevelTiles);
-    
+
     this.isLevelDone$ = this.level.pipe(
       map((level) => {
         return !level.blocks
@@ -142,17 +162,16 @@ export class ElCaminoComponent implements OnInit {
       }),
       tap((stop) => {
         if (stop) {
-          // console.log('Done')
+          console.log('Done');
           setTimeout(() => {
             this.currentLevel.next(this.levelCount++);
-            this.isLevelDone.next(true)
-                    }, 2000);
-          
+            this.isLevelDone.next(true);
+          }, 1000);
         } else {
-          // console.log('Not yet')
-          this.isLevelDone.next(false)
+          console.log('Not yet');
+          this.isLevelDone.next(false);
         }
-        }
-    ));
+      }),
+    );
   }
 }
