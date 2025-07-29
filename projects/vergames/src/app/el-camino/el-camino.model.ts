@@ -30,16 +30,16 @@ export function tileImageFromType(type: TileType): string {
   var image:string='';
   switch (type) {
     case TileType.B:
-      image = '/el-camino/blank.png';
+      image = '/el-camino/x_blank.png';
       break;
     case TileType.C:
-      image = '/el-camino/curve.png';
+      image = '/el-camino/x_curve.png';
       break;
     case TileType.E:
-      image = '/el-camino/end.png';
+      image = '/el-camino/x_end.png';
       break;
     case TileType.S:
-      image = '/el-camino/straight.png';
+      image = '/el-camino/x_line.png';
       break;
   }
   return image;

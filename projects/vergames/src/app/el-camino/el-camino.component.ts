@@ -36,16 +36,17 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
   <div style="display: flex; flex-direction: column; justify-content: start;align-items:center">
     <h1 class="font-bold text-3xl">El camino</h1>
-    <button [disabled]="disableButton" mat-raised-button type="button" (click)="nextLevel();toggleFullscreen()">Inicio</button>
+    <button [disabled]="disableButton" mat-raised-button type="button" (click)="nextLevel();">Inicio</button>
     <div *ngIf="level$ | async as level" style="width: 85%;max-width:500px; max-height:500px;padding-bottom:0;height:auto;">
       <ngx-spinner bdColor="#fff" size="large" color="#000" type="pacman" [fullScreen]="true"><p style="color:black;font-size:80px"  *ngIf="!(isLevelDone$|async)"> Level:{{level.level}}</p></ngx-spinner>
-      <mat-grid-list class="mat-grid-list"  cols="{{ level.cols }}">
+      <mat-grid-list class="mat-grid-list"  cols="{{ level.cols }}"
+      [@glow]="glowState">
         <ng-container #container *ngFor="let tile of level.blocks; index as i">
           <mat-grid-tile class="mat-grid-tile" (click)="rotate(level, tile)" [@rotateState]="tile.currentRotation" 
           [ngStyle]="{
               filter: 'invert(100%)',
               background: 'center / cover no-repeat url(' + tile.image + ')',
-              border: (tile.success && devMode) ? '2px dashed #550055' : 'none',
+              border: (tile.success && devMode) ? 'none//2px dashed #550055' : 'none',
             }">
             <div><span></span></div>
           </mat-grid-tile>
@@ -61,9 +62,17 @@ import { MatIconModule } from '@angular/material/icon';
       state('90', style({ transform: 'rotate(90deg)' })),
       state('180', style({ transform: 'rotate(180deg)' })),
       state('270', style({ transform: 'rotate(270deg)' })),
-      transition('* => *', animate('50ms ease-in-out')),
+      transition('* => *', animate('300ms ease-in-out')),
     ]),
- 
+    trigger('glow', [
+      state('initial', style({
+        boxShadow: '0 0 0 rgba(0, 0, 0, 0)' // No glow initially
+      })),
+      state('glowing', style({
+         boxShadow: '0 0 20px rgba(0, 123, 255, 0.7)' // Blue glow
+      })),
+      transition('initial <=> glowing', animate('100ms ease-in-out'))
+    ])
   ],
   providers: [ElCaminoService,NgxSpinnerService],
 })
@@ -154,10 +163,14 @@ devMode:boolean=isDevMode();
       tap((stop) => {
         if (stop) {
           // console.log('Done');
-          this.showSpinner()
+         this.toggleGlow();
+          
           setTimeout(() => {
+            this.showSpinner()
+            this.toggleGlow();
             this.currentLevel.next(this.levelCount++);
-          }, 500);
+
+          }, 1000);
         } else {
           // console.log('Not yet');
         }
@@ -170,6 +183,7 @@ devMode:boolean=isDevMode();
     setTimeout(() => {
         /** spinner ends after 5 seconds */
         this.spinner.hide();
+        //this.toggleGlow()
     }, 1500);
   }
 
@@ -212,4 +226,18 @@ devMode:boolean=isDevMode();
       }
     }
   }
+
+  glowState: string = 'initial';
+    
+      toggleGlow() {
+        this.glowState = this.glowState === 'initial' ? 'glowing' : 'initial';
+      }
+    
+      onGlowStart() {
+        console.log('Glow animation started');
+      }
+    
+       onGlowDone() {
+         console.log('Glow animation finished');
+      }
 }

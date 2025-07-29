@@ -253,12 +253,7 @@ export class ElCaminoService {
               image: tileImageFromType(tile.type),
               currentRotation: iniRot,
               correctRotation: tile.rot,
-              success:
-                tile.type == TileType.B
-                  ? true
-                  : iniRot - tile.rot == 0
-                    ? true
-                    : false,
+              success:(tile.type == TileType.B)
             } as TileExtended;
           });
           return {
